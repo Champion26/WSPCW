@@ -1,0 +1,59 @@
+<style>
+body { margin: 0; }
+
+#sidepanel
+{
+  position: absolute;
+  min-width: 30px;
+  height: 60%;
+  top: 20%;
+  left: 0;
+}
+
+#bar
+{
+  display: table;
+  background-color: #999999;
+  color: white;
+  width: 30px;
+  height: 100%;
+  text-align: center;
+}
+
+#bar div
+{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#panel
+{
+  display: none;
+  background-color: #999999;
+  color: white;
+  width: 300px;
+  height: 100%;
+  text-align: center;
+}
+
+#panel div
+{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#sidepanel:hover #bar { display: none; }
+#sidepanel:hover #panel { display: table; }
+</style>
+<div id='sidepanel'>
+  <div id='bar'>
+    <div>
+      &gt;<br>&gt;<br>&gt;
+    </div>
+  </div>
+  <div id='panel'>
+    <div>
+      stuff
+    </div>
+  </div>
+</div>

@@ -1,0 +1,198 @@
+section {
+	color: black;
+        border-color: black;
+}
+p {
+	font-family: arial;
+	font-size: 90%;
+        line-height: 150%;
+
+}
+
+li{
+list-style-type: none;
+}
+
+p2{
+     font-family: arial;
+	font-size: 90%;
+        text-align: center;
+}
+strong {
+    font-family: arial;
+}
+
+.headerLogo img{
+     float:left;
+
+
+}
+.basket img{
+
+	width:10%;
+}
+
+body
+{
+  margin-left: 6%;
+  margin-right:6%;
+  margin-top: 3%;
+}
+
+h1{
+   font-family: calibri;
+   font-size: 280%;
+
+   text-align:center;
+   margin-bottom:20px;
+
+	}
+
+h3{
+   font-family: calibri;
+   text-align:center;
+   margin-bottom:20px;
+}
+
+
+h4{
+   font-family: calibri;
+	font-size: 110%;
+   color: black;
+	}
+
+
+
+
+section {
+ float:left;
+ padding: 10px 10px 0px 5px;
+
+
+}
+
+body{
+    border-top: 1px black;
+}
+
+#content{
+    width: 100%;
+    height: 100%;
+
+    border-style: solid solid solid solid;
+    border-color: black white white white;
+    padding-top: 5px;
+
+}
+
+#content div, nav{
+	-webkit-flex: 1;  /* Safari 6.1+ */
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	flex: 1;
+}
+
+
+#sidebar{
+    padding: 10px 0px 100px 0px;
+    width: 250px;
+    height: 100%;
+    float: left;
+
+
+}
+
+#mainContent{
+    margin-left: 250px;
+    height: 100%;
+
+}
+
+#header div{
+	webkit-flex: 1;  /* Safari 6.1+ */
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	flex: 1;
+}
+
+#header nav{
+	webkit-flex: 1;  /* Safari 6.1+ */
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	flex: 1;
+}
+
+nav a:link, a:visited {
+    display: block;
+    font-weight: bold;
+    color: white;
+    background-color: green;
+    text-align: center;
+    padding: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+#topNav a:link, a:visited{
+    width: 120px;
+}
+
+#sidebar a:link a:visited{
+    width:200px;
+}
+
+nav a:hover, a:active {
+    background-color: white;
+    color: black;
+}
+
+
+nav ul {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block;
+    list-style-type: none;
+
+
+}
+
+nav li {
+    float: left;
+    border: 2px solid;
+    border-color: white;
+    color: white;
+}
+
+
+footer
+{
+    border-top:5px solid;
+    text-align:center;
+		clear: both;
+}
+
+
+
+basket {
+   text-align: right;
+}
+
+
+header
+{
+
+text-align:center;
+padding: 0px 0px 0px 0px;
+
+}
+
+#footerLinks li{
+  display: inline;
+ }
+
+ #footerLinks a:link, a:visited{
+     color:black;
+
+ }

@@ -1,0 +1,62 @@
+ elseif(isset($_POST['deleteRecord'])){
+    $deletedArray[] = NULL;
+    global $deletedProductCode, $deletedProductName, $deletedProductType, $deletedDesc, $deletedPrice;
+
+    if(isset($_POST['prodCode'])){
+      if(isset($_POST['prodCode'])){
+        $deletedProductCode = $_POST['prodCode'];
+     }
+      if(isset($_POST['productN'])){
+        $deletedProductName = $_POST['productN'];
+      }
+      if(isset($_POST['description'])){
+        $deletedDesc = $_POST['description'];
+      }
+      if(isset($_POST['productType'])){
+        $deletedProductType = $_POST['productType'];
+      }
+      if(isset($_POST['price'])){
+        $deletedPrice = $_POST['price'];
+      }
+      array_push($deletedArray, $deletedProductCode, $deletedProductName, $deletedProductType, $deletedDesc, $deletedPrice);
+    $dbcon = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
+    $dbcon->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $q = "DELETE FROM product
+          WHERE productCode = :prodCode;";
+    $query = $dbcon->prepare($q);
+    $query->bindValue(":prodCode", $deletedProductCode, PDO::PARAM_STR);
+    $result = $query -> execute();
+    echo $productName . ' ' . " has been deleted.";
+    $dbcon = NULL;
+   }
+
+  }
+
+
+  elseif(isset($_POST['undoDelete'])){
+    global $deletedArray;
+    print_r($deletedArray);
+
+    $inputProductCode = $deletedArray[0];
+    $inputProductName = $deletedArray[1];
+    $inputDesc = $deletedArray[2];
+    $inputProductType = $deletedArray[3];
+    $inputPrice = $deletedArray[4];
+    $inputQuantity = $deletedArray[5];
+
+    echo $deletedDesc;
+    $dbRe = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
+    $q = "INSERT INTO product(productCode, productName, description, productType, price, quantity) VALUES (:prodCode, :prodName, :description, :prodType, :price, :quantity)";
+    $query = $dbRe->prepare($q);
+    $results = $query->execute(array(
+    ":prodCode" =>$inputProductCode,
+    ":prodName" =>$inputProductName,
+    ":description" =>$inputDesc,
+    ":prodType" =>$inputProductType,
+    ":price" =>  $inputPrice,
+    ":quantity" =>  $inputQuantity
+    ));
+    echo   $inputProductName . ' ' . "Record has been re-inserted into the system.";
+    $dbRe = null;
+
+  }
