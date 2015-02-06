@@ -13,8 +13,12 @@ $username = 'root';
 
 /*** mysql password ***/
 $password = '';
+$sql = NULL;
 $db = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
-if (isset($_POST['searchCode'])) || (isset($_POST['productName'])) || (isset($_POST['productPrice'])){
+$setCode = isset($_POST['searchCode']);
+$setName = isset($_POST['productName']);
+$setPrice = isset($_POST['productPrice']);
+if (!isset($_POST['searchCode'], $_POST['productName'],  $_POST['productPrice'])){
 
 
     if (isset($_POST['productCode'])){
@@ -31,7 +35,6 @@ if (isset($_POST['searchCode'])) || (isset($_POST['productName'])) || (isset($_P
 
     }
     if (isset($_POST['productName'])){
-      $prodCode= $_POST['productCode'];
       $productCode = NULL;
       $prodName = $_POST['productName'];
       $desc = NULL;
@@ -45,9 +48,9 @@ if (isset($_POST['searchCode'])) || (isset($_POST['productName'])) || (isset($_P
     if (isset($_POST['productPrice'])){
         $minPrice = $_POST['minPrice'];
         $maxPrice = $_POST['maxPrice'];
-        $prodCode= $_POST['productCode'];
+
         $productCode = NULL;
-        $prodName = $_POST['productName'];
+        $prodName = NULL;
         $desc = NULL;
         $prodType = NULL;
         $price = NULL;
@@ -56,26 +59,30 @@ if (isset($_POST['searchCode'])) || (isset($_POST['productName'])) || (isset($_P
         FROM product
         WHERE price BETWEEN $minPrice AND $maxPrice;";
     }
-    foreach ($db->query($sql) as $row) :
-      if(empty($row)){
-        echo "There is no such product.";
-      }
-      else{
-        $productCode = $row ['productCode'];
-        echo $productCode;
-        $prodName = $row ['productName'];
-        echo $prodName;
-        $desc = $row ['description'];
-        echo $desc;
-        $prodType = $row ['productType'];
-        echo $prodType;
-        $price = $row ['price'];
-        echo $price;
-        $quantity = $row ['quantity'];
-        echo $quantity;
-      }
-    endforeach;
-    $db = null;
+    if (empty($sql)) {
+        echo "Please enter a value.";
+    } else {
+      foreach ($db->query($sql) as $row) :
+        if(empty($row)){
+          echo "There is no such product.";
+        }
+        else{
+          $productCode = $row ['productCode'];
+          echo $productCode;
+          $prodName = $row ['productName'];
+          echo $prodName;
+          $desc = $row ['description'];
+          echo $desc;
+          $prodType = $row ['productType'];
+          echo $prodType;
+          $price = $row ['price'];
+          echo $price;
+          $quantity = $row ['quantity'];
+          echo $quantity;
+        }
+      endforeach;
+      $db = null;
+  }
 }
 
 ?>

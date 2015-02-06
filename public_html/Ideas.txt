@@ -2,3 +2,5 @@ Ideas
 
 Use global arrays to set the appropriate variables so the
 get $prodName[3] so query selects the correct record
+
+use array to store found product records and then next or previous button to cycle through.
