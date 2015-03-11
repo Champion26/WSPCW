@@ -3,7 +3,7 @@
 <p>Please enter the product code that you wish to search for.</p>
 
 <?php
-global $productCode, $prodCode, $productID, $prodName, $desc, $prodType, $price, $quantity, $deletedArray;
+global $productCode, $prodCode, $productID, $prodName, $desc, $prodType, $price, $quantity, $deletedArray, $multiResult;
 
 /*** mysql hostname ***/
 $hostname = 'localhost';
@@ -14,11 +14,17 @@ $username = 'root';
 /*** mysql password ***/
 $password = '';
 $sql = NULL;
+global $x, $i, $ifPrice, $arraySize, $sql, $q;
+$arraySize = sizeof($multiResult);
+$i = 0;
+$multiResult = array();
 $db = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
 $setCode = isset($_POST['searchCode']);
 $setName = isset($_POST['productName']);
 $setPrice = isset($_POST['productPrice']);
-if (!isset($_POST['searchCode'], $_POST['productName'],  $_POST['productPrice'])){
+$ifPrice = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (!isset($_POST['searchCode'], $_POST['productName'])){
 
 
     if (isset($_POST['productCode'])){
@@ -45,28 +51,19 @@ if (!isset($_POST['searchCode'], $_POST['productName'],  $_POST['productPrice'])
       FROM product
       WHERE productName = '$prodName';";
     }
-    if (isset($_POST['productPrice'])){
-        $minPrice = $_POST['minPrice'];
-        $maxPrice = $_POST['maxPrice'];
 
-        $productCode = NULL;
-        $prodName = NULL;
-        $desc = NULL;
-        $prodType = NULL;
-        $price = NULL;
-        $quantity = NULL;
-        $sql = "SELECT productCode, productName, productType, description, price, quantity
-        FROM product
-        WHERE price BETWEEN $minPrice AND $maxPrice;";
-    }
     if (empty($sql)) {
         echo "Please enter a value.";
+
     } else {
+      $j = 0;
+      echo "if statement";
       foreach ($db->query($sql) as $row) :
+        $length = (sizeof($row));
         if(empty($row)){
           echo "There is no such product.";
         }
-        else{
+
           $productCode = $row ['productCode'];
           echo $productCode;
           $prodName = $row ['productName'];
@@ -79,12 +76,108 @@ if (!isset($_POST['searchCode'], $_POST['productName'],  $_POST['productPrice'])
           echo $price;
           $quantity = $row ['quantity'];
           echo $quantity;
+
+
+      endforeach;
+
+      $x = (sizeof($multiResult));
+      echo $x;
+      $db = null;
+  }}
+
+  if (isset($_POST['productPrice'])){
+    $minPrice = $_POST['minPrice'];
+    $maxPrice = $_POST['maxPrice'];
+    $productCode = NULL;
+    $prodName = NULL;
+    $desc = NULL;
+    $prodType = NULL;
+    $price = NULL;
+    $quantity = NULL;
+    $q = "SELECT productCode, productName, productType, description, price, quantity
+    FROM product
+    WHERE price = 0.00;";
+
+  if (empty($q)) {
+    echo "Please enter a value.";
+    echo 'not working price';
+  }
+  else {
+    $j = 0;
+    foreach ($db->query($q) as $row) :
+      if(empty($row)){
+        echo "There is no such product.";
+      }
+      else{
+
+          $productC = $row ['productCode'];
+
+          $prodN = $row ['productName'];
+
+          $des = $row ['description'];
+
+          $prodT = $row ['productType'];
+
+          $pri = $row ['price'];
+
+          $quan = $row ['quantity'];
+
+          $productArray = array ($productC, $prodN, $des, $prodT, $pri, $quan);
+          $multiResult[] = $productArray;
+          if ($j === sizeof($row)){
+              $results = $multiResult[0];
+              $productCode = $results[0];
+              $prodName = $results [1];
+              $desc = $results[2];
+              $prodType = $results[3];
+              $price = $results[4];
+              $quantity = $results[5];
+          }
+          $j++;
         }
       endforeach;
-      $db = null;
-  }
-}
+        $db = null;
+      }}
 
+
+
+  if (isset ($_POST['next'], $_POST['previous'])){
+   if ($arraySize >= 1){
+     if (isset($_POST['next'])){
+       if ($i === $x){
+         echo 'There are no more records to display';
+       } else {
+         $results = $multiResult[$i];
+         $i++;
+         $productCode = $results[0];
+         $prodName = $results [1];
+         $desc = $results[2];
+         $prodType = $results[3];
+         $price = $results[4];
+         $quantity = $results[5];
+      }
+     }
+     else if(isset($_POST['previous'])){
+       if ($i === 0){
+         echo 'You cannot go back any further.';
+       } else{
+         $i--;
+         $results = $multiResult[$i];
+         $productCode = $results[0];
+         $prodName = $results [1];
+         $desc = $results[2];
+         $prodType = $results[3];
+         $price = $results[4];
+         $quantity = $results[5];
+       }
+     }
+   } else{
+     echo "There are no results to cycle through.";
+   }
+ }
+ }
+
+echo $arraySize;
 ?>
 <p>Search by product code.</p>
 <form id="searchCode" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -108,8 +201,8 @@ Product Code:  <input type="text" id="productCode" name="productCode" ><br><br>
 <form id="searchCode" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   <fieldset>
     Price
-    <p>Minimum price (£):</p>  <input type="range" id="minPrice" name="minPrice" min="0" max="500" step="20" ><br><br>
-    <p>Maximum price (£):</p>  <input type="range" id="maxPrice" name="maxPrice" min="0" max="500" step="20" ><br><br>
+    <p>Minimum price (£):</p>  <input type="number" id="minPrice" name="minPrice" ><br><br>
+    <p>Maximum price (£):</p>  <input type="number" id="maxPrice" name="maxPrice" ><br><br>
     <input type="submit" name='searchPrice' value="Search">
   </fieldset>
 </form>
@@ -136,17 +229,7 @@ Quantity:  <input type="number"  name="quantity" value=<?php echo htmlspecialcha
 
 <input type="submit" name='submitEdit' value="Update">
 <input type="submit" onclick="clicked()" id='delete' name='deleteRecord' value="Delete">
-
+<input type="submit" name='next' value="Next">
+<input type="submit" name='previous' value="Previous">
 </fieldset>
 </form>
-
-
-<script type="text/javascript">
-function clicked() {
-  if (confirm('Do you wanna to delete this record?')) {
-    document.getElementById("delete").submit();
-  } else {
-    return false;
-  }
-}
-</script>

@@ -22,7 +22,7 @@ try {
           FROM product
           INNER JOIN producttype
           ON product.productType = productType.productTypeID
-          WHERE productType.type = '$type'"; ?>
+          WHERE productType.type = 'Desktop';" ?>
   <table class='productTable'>
     <tr>
         <th>Product Code</td>

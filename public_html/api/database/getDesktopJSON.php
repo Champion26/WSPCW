@@ -1,3 +1,3 @@
-<h2>Laptop</h2>
+<h2>Desktops</h2>
 
   <table id="productTable"></table>
