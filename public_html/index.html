@@ -1,6 +1,17 @@
 <div id="head"></div>
 <header>
-  <div id='title'></div>
+
+      <h1 id='pageTitle'>Company Name</h1>
+
+        <form id="searchBar" >
+          <fieldset>
+            <input list="names" id="productN" name="productN"  ><br>
+            <datalist id="names"></datalist>
+            <input type="button" value="Search" onclick="searchByNameGlobal(event)">
+          </fieldset>
+        </form>
+
+
   <nav id='topNav'></nav>
 </header>
 <div id="dynamic"></div>

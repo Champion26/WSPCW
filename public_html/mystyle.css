@@ -9,6 +9,32 @@ p {
 
 }
 
+#topBlock{
+  overflow:hidden;
+  width:100%;
+}
+#searchSection{
+  float:left;
+  width:20%;
+}
+#title{
+  float:left;
+  width:80%;
+}
+
+
+#searchPage{
+  overflow:hidden;
+  width:100%;
+}
+#codeSection{
+  float:left;
+  width:20%;
+}
+#nameSection{
+  float:left;
+  width:80%;
+}
 table, th, td{
   border: 1px solid green;
 }
@@ -51,7 +77,9 @@ td{
   border-left: 1px solid;
   border-right: 1px solid;
 }
-
+.searchBar{
+  width: 70px;
+}
 li{
 list-style-type: none;
 }
@@ -74,6 +102,7 @@ strong {
 header{
 	padding-bottom: 10px;
   border-bottom: 2px solid;
+  width:100%;
 
 }
 
@@ -142,12 +171,12 @@ section {
   position: fixed !important;
 
 }
- 
+
 
 #mainContent{
   margin-left: 250px;
   height: auto;
-  
+
 
 }
 
