@@ -4,13 +4,11 @@ function postJSON(variable, URL, callback) {
   console.log("posting");
   ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-  ajaxObj.load = function() {
-    if (ajaxObj.responseText == "1"){
-      alert("You have added a new product");
-    }else{
-      alert("The product was not added.");
-    }
-  };
+  ajaxObj.addEventListener("load",
+  function() {
+    
+  }
+);
   ajaxObj.send(variable);
 }
 
@@ -20,8 +18,11 @@ function returnJSON(variable, URL, callback) {
   console.log("posting");
   ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-  ajaxObj.load = function() {
-    callback(JSON.parse(ajaxObj.responseText));
-  };
+  ajaxObj.addEventListener("load",
+    function() {
+        console.log("received");
+        callback(JSON.parse(ajaxObj.responseText));
+    }
+  );
   ajaxObj.send(variable);
 }

@@ -9,6 +9,9 @@ var searchArray = [];
 var userSearch = [];
 var productTypes= [];
 var siteDescription;
+var siteDetails=[];
+var changesMade=[];
+var dbRetrievedDetails=[];
 
 function addToBasket(e) {
   var details = JSON.parse(e.currentTarget.dataset.detail);
@@ -57,7 +60,7 @@ function setHome() {
       /*Sidebar*/
       document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
         /*Content*/
-        ajaxGet('content/contactUs.txt', function(data) {
+        ajaxGet('api/database/contactUs.html', function(data) {
           grabElement(data, 'mainContent');
         });
       });
@@ -78,7 +81,7 @@ function setHome() {
         });
 
       });
-      ajaxGet('content/message.txt', function(data) {
+      ajaxGet('api/database/contactUs.html', function(data) {
         grabElement(data, 'mainContent');
       });
     });
@@ -119,7 +122,19 @@ function setProductSidebar(){
   applyEventListeners();
 }
 function applyIndividualListener(type,x){
+
   document.getElementById(productTypes[x]).addEventListener("click", function(data){
+    var productType = [];
+    for (var i = 0; i < productArray.length; i++) {
+      var product = productArray[i];
+      var prodType = product[3];
+      if (prodType === type) {
+        productType.push(product);
+      }
+    }
+    if (productType.length === 0){
+      alert("There are no products for this category.");
+    } else{
     ajaxGet('api/database/getProductTable.php', function(data) {
       grabElement(data, 'mainContent');
       console.log(type);
@@ -127,8 +142,11 @@ function applyIndividualListener(type,x){
       printProducts(type);
       getButtons();
     });
-  });
+  }
+});
 }
+
+
 function applyEventListeners(){
   for (var x = 0; x < productTypes.length; x++){
     var type = productTypes[x];
@@ -146,7 +164,7 @@ function setProducts() {
       setProductSidebar();
     });
 
-    ajaxGet('content/desktops.txt', function(data) {
+    ajaxGet('api/database/productsDesc.html', function(data) {
       grabElement(data, 'mainContent');
     });
   }, false);
@@ -167,6 +185,9 @@ function submitChanges(e) {
   var price = document.getElementById("price").value;
   var quantity = document.getElementById("quantity").value;
   var type = document.getElementById("productType").value;
+  if (productTypes.indexOf(type) === -1){
+    alert(type+" is not a valid type.");
+  }else{
 
   var productDetails = "productCode=" + prodCode + "&productName=" + prodName + "&description=" + desc + "&productPrice=" + price + "&productQuantity=" + quantity + "&productType=" + type;
   console.log(productDetails);
@@ -174,12 +195,140 @@ function submitChanges(e) {
     productDetails,
     'api/database/updateProduct.php',
     function(data) {
-      alert("You have updated " + prodName + ".");
+
+    }
+  );
+  document.getElementById("pCode").value = "";
+  document.getElementById("productN").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("quantity").value = "";
+  document.getElementById("productType").value = "";
+  alert("You have updated " + prodName + ".");
+}
+}
+function makeEditable(id){
+    var change = document.getElementById(id);
+   change.addEventListener("click", function(){
+      change.setAttribute("contenteditable", "true");
+  });
+  }
+function applyEdits(element){
+  element.addEventListener("click", function(){
+    element.setAttribute("contenteditable", "true");
+
+
+  });
+}
+function postChanges(changed){
+  postJSON(
+    changed,
+    'api/database/updateDetail.php',
+    function(data) {
     }
   );
 }
+function sendDBChanges(e){
+  console.log("running");
+  if (e.keyCode == 83 && e.shiftKey){
+    console.log("accepted");
+    for (var i =0; i < changesMade.length; i++){
+      var id = changesMade[i][0];
+      var content = changesMade[i][1];
+      var changed = "id="+id+"&content="+content;
+      postChanges(changed);
+    }
+  }
+}
 
+function sendChanges(element){
+  var id = element.getAttribute("id");
+  var content = element.innerHTML;
+  var found = false;
+  for (var i =0; i < changesMade.length; i++){
+    if (id === changesMade[i][0]){
+      found =true;
+      break;
+    }
+  }
+  if (found === false){
+    var changes =[id,content];
+    changesMade.push(changes);
+  }
+  console.log(changesMade);
+
+
+}
+
+function saveChanges(element){
+  element.addEventListener("click", function(){
+    element.addEventListener("keypress", function(){
+      setTimeout(sendChanges, 3000, element);
+    });
+
+
+  });
+}
+
+function getDetails(){
+  getJSON("api/database/selectDetails.php", function(data) {
+    console.log("details");
+    addDetails(data);
+
+  });
+}
+
+function addDetails(data){
+  for (var i = 0; i < data.length ; i++){
+    dbRetrievedDetails.push(data[i]);
+  }
+  loadSiteDetails();
+}
+
+function loadSiteDetails(){
+  var all = document.getElementsByTagName("*");
+  console.log("working");
+  for (var i = 0; i < all.length; i++){
+    var element = all[i];
+
+    if (element.hasAttribute("data-edit")){
+       for (var x = 0; x < dbRetrievedDetails.length; x++){
+         var id =element.getAttribute("id");
+         if (id === dbRetrievedDetails[x][0]){
+           element.innerHTML = dbRetrievedDetails[x][1];
+         }
+       }
+    }
+  }
+}
+
+function findEditableElements(){
+  var all = document.getElementsByTagName("*");
+
+  for (var i = 0; i < all.length; i++){
+    var element = all[i];
+
+    if (element.hasAttribute("data-edit")){
+
+      applyEdits(element);
+      saveChanges(element);
+
+    }
+  }
+}
+
+function editable(){
+    var classname = document.getElementsByClassName("editable");
+    console.log(classname.length);
+
+    for(var i=0;i<classname.length;i++){
+        classname[i].addEventListener('click' ,function(){
+            classname[i].setAttribute("contenteditable", "true");
+        });
+    }
+}
 function getSearch(e) {
+  searchResults=[];
   e.preventDefault();
   var prodCode = document.getElementById("productCode").value;
 
@@ -189,29 +338,65 @@ function getSearch(e) {
     'api/database/returnSearch.php',
     function(data) {
       getSearchResult(data);
-      console.log("working");
 
+      if (searchResults.length > 1) {
+        alert("There are too many results to display.");
+      } else if (searchResults.length === 0){
+        alert("There are no results for " + prodCode);
+
+      } else if (searchResults.length > 0) {
+        document.getElementById("pCode").value = searchResults[0][0];
+        document.getElementById("productN").value = searchResults[0][1];
+        document.getElementById("description").value = searchResults[0][2];
+        document.getElementById("productType").value = searchResults[0][3];
+        document.getElementById("price").value = searchResults[0][4];
+        document.getElementById("quantity").value = searchResults[0][5];
+
+      }
     }
   );
-
-  if (searchResults.length > 1) {
-    alert("There are too many results to display.");
-  } else if (searchResults.length = 0) {
-    alert("There are no results for " + prodCode);
-
-  } else if (searchResults.length > 0) {
-    document.getElementById("pCode").value = searchResults[0][0];
-    document.getElementById("productN").value = searchResults[0][1];
-    document.getElementById("description").value = searchResults[0][2];
-    document.getElementById("productType").value = searchResults[0][3];
-    document.getElementById("price").value = searchResults[0][4];
-    document.getElementById("quantity").value = searchResults[0][5];
-
-  }
-
-
 }
 
+function addPreset(presetElement){
+
+  postJSON(
+    presetElement,
+    'api/database/addSitePreset.php',
+    function(data) {
+    }
+  );
+}
+
+function setAllContent(){
+  console.log("setting");
+  var all = document.getElementsByTagName("*");
+
+  for (var i = 0; i < all.length; i++){
+    var element = all[i];
+    if (element.hasAttribute("data-edit")){
+      var id = element.getAttribute("id");
+      var content = element.innerHTML;
+      var found = false;
+      for (var x= 0; x < siteDetails.length; x++){
+        if (id === siteDetails[x][0]){
+          found = true;
+          break;
+        }
+      }
+      console.log(found);
+      if (found === false){
+        var presetElement = "id="+id+"&content="+content;
+        console.log(presetElement);
+        var elementArray = [id, content];
+        siteDetails.push(elementArray);
+        addPreset(presetElement);
+      }
+
+
+    }
+  }
+  console.log(siteDetails);
+}
 
 function deleteType(e) {
   e.preventDefault();
@@ -222,11 +407,11 @@ function deleteType(e) {
     productDetails,
     'api/database/deleteType.php',
     function(data) {
-      console.log("working");
+
 
     }
   );
-
+  refreshTypes();
 
 }
 
@@ -245,7 +430,7 @@ function getSearchBy(response) {
     searchArray.push(product);
     console.log("added");
   }
-  console.log(searchResults);
+  console.log(searchArray);
 }
 
 
@@ -262,7 +447,7 @@ function searchByName(e) {
     function(data) {
       getSearchBy(data);
       console.log(searchArray.length);
-      console.log("working");
+
       printSearch();
     }
   );
@@ -281,19 +466,25 @@ function searchByNameGlobal(e) {
   var productDetails = "productName=" + prodName;
   returnJSON(
     productDetails,
-    'api/database/searchByName.php',
-    function(data) {
-      getSearchBy(data);
+    'api/database/searchBar.php',
+    function(dataTwo) {
       console.log("working");
       console.log(searchArray.length);
 
       ajaxGet('api/navigation/searchSidebar.php', function(data) {
         grabElement(data, 'sidebar');
+
       });
+
       ajaxGet('api/database/search.php', function(data) {
         grabElement(data, 'mainContent');
         document.getElementById("searchTable").innerHTML = "";
+        getSearchBy(dataTwo);
+        console.log(searchArray);
+
+
         printSearch();
+        getButtons();
 
       });
 
@@ -318,7 +509,7 @@ function searchByCode(e) {
     'api/database/searchByCode.php',
     function(data) {
       getSearchBy(data);
-      console.log("working");
+
       printSearch();
 
     }
@@ -327,6 +518,39 @@ function searchByCode(e) {
 
 
 }
+
+function showEditable(e){
+
+  if (e.keyCode == 69 && e.shiftKey){
+
+    var all = document.getElementsByTagName("*");
+
+    for (var i = 0; i < all.length; i++){
+      var element = all[i];
+      if (element.hasAttribute("data-edit")){
+        element.style.border="thick solid red";
+
+
+      }
+    }
+  }
+  document.addEventListener("keyup", resetEditables);
+}
+
+function resetEditables(e){
+  if (e.keyCode == 69 && e.shiftKey){
+    var all = document.getElementsByTagName("*");
+
+    for (var i = 0; i < all.length; i++){
+      var element = all[i];
+      if (element.hasAttribute("data-edit")){
+        element.style.border="0px";
+        element.style.borderColor="";
+      }
+    }
+  }
+}
+document.addEventListener("keydown", showEditable);
 
 
 function printSearch() {
@@ -550,12 +774,9 @@ function setAdminFieldContent() {
 
 function submitSiteEdits() {
   var tabTitle = document.getElementById("tabTitle").value;
-  var mainTitle = document.getElementById("mainTitle").value;
-  var desc = document.getElementById("description").value;
-  siteDescription = desc;
-  console.log(siteDescription);
+
   document.getElementById("title").innerHTML = tabTitle;
-  document.getElementById("pageTitle").innerHTML = mainTitle;
+
 }
 
 function getTypes() {
@@ -591,12 +812,14 @@ function setAdmin() {
       document.getElementById("editProduct").addEventListener("click", function(data) {
         ajaxGet('api/database/editAdmin.php', function(data) {
           grabElement(data, 'mainContent');
+          getTypes();
         });
       });
       document.getElementById("setPageDetails").addEventListener("click", function(data) {
         ajaxGet('api/database/setSiteDetails.php', function(data) {
           grabElement(data, 'mainContent');
           setAdminFieldContent();
+
         });
       });
     });
@@ -629,7 +852,6 @@ function setPage() {
     grabElement(data, 'topNav');
     setHome();
     setProducts();
-    setOffers();
     setBasket();
     setAdmin();
     setSearch();
@@ -638,16 +860,17 @@ function setPage() {
 }
 
 function pageLoad() {
+  document.addEventListener("keypress", sendDBChanges);
   ajaxGet('api/navigation/homeSidebar.php', function(data) {
     grabElement(data, 'sidebar');
     document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
       /*Content*/
-      ajaxGet('content/contactUs.txt', function(data) {
+      ajaxGet('api/database/contactUs.html', function(data) {
         grabElement(data, 'mainContent');
       });
     });
     document.getElementById("description").addEventListener("click", function(data) {
-      ajaxGet('content/description.txt', function(data) {
+      ajaxGet('api/database/description.html', function(data) {
         grabElement(data, 'mainContent');
       });
     });
@@ -659,7 +882,7 @@ function pageLoad() {
     });
   });
 
-  ajaxGet('content/message.txt', function(data) {
+  ajaxGet('api/database/contactUs.html', function(data) {
     grabElement(data, 'mainContent');
   });
   getJSON("api/database/selectTypeJSON.php", function(data) {
@@ -668,7 +891,7 @@ function pageLoad() {
   getJSON("api/database/selectProductType.php", function(data) {
     getProductTypes(data);
   });
-
+  getDetails();
 }
 
 function refreshTypes(){
@@ -847,9 +1070,6 @@ function printProducts(type) {
       productType.push(product);
     }
   }
-  if (productType.length === 0){
-    alert("There are no products for this category.");
-  } else{
   // creating all cells
   for (var i = 0; i < productType.length; i++) {
     // creates a table row
@@ -915,7 +1135,7 @@ function printProducts(type) {
   target.appendChild(tbl);
 
 }
-}
+
 
 
 

@@ -1,13 +1,11 @@
 
-<h2>Site Edit</h2>
-<p>This page will allow you to edit details about the site such as the title.</p>
-
+<h2 id="siteEditTitle" data-edit="">Site Edit</h2>
+<p id="siteEditIntro" data-edit="">This page will allow you to edit details about the site such as the title.</p>
+<p id="editElementExplanation" data-edit="">Many elements of this site are editable by a simple click such as the main title. These elements will be highlighted in red when you hover over them or you can press and hold <strong>Shift + E</strong> to highlight all these editable elements.</p>
 
 <form id="details">
   <fieldset>
   Site Tab Title:  <input type="text" id="tabTitle" name="tabTitle" ><br><br>
-  Site Main Title: <input type="text" id="mainTitle" name="mainTitle"><br><br>
-  Description: <input type="text" id="description" name="description"><br><br>
   <input type="button" value="Submit Changes" onclick="submitSiteEdits()">
 </fieldset>
 </form>

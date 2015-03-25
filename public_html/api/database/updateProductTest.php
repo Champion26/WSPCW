@@ -10,14 +10,13 @@ $username = 'root';
 $password = '';
 
 $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
+$prodCode = "fasd";
+$prodName = "asd";
+$desc = "adgadfadfadsf";
+$productType = 1;
+$price = 188.00;
+$quantity = 1;
 
-if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_POST['productType'], $_POST['productPrice'], $_POST['productQuantity'])){
-     $prodCode = $_POST['productCode'];
-     $prodName = $_POST['productName'];
-     $desc = $_POST['description'];
-     $productType = $_POST['productType'];
-     $price = $_POST['productPrice'];
-     $quantity = $_POST['productQuantity'];
      $q = "UPDATE product
      SET productCode = :prodCode, productName = :prodName, description = :description, productType = :prodType, price = :price, quantity= :quantity
      WHERE productCode = :prodCode;";
@@ -38,10 +37,6 @@ if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_P
 
 
 
-
-} else {
-     echo 0;
-}
 $dbh = null;
 
 ?>

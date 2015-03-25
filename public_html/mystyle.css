@@ -9,6 +9,11 @@ p {
 
 }
 
+[data-edit]:hover {
+  border:5px solid !important;
+  border-color: red !important;
+}
+
 #topBlock{
   overflow:hidden;
   width:100%;

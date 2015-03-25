@@ -1,2 +1,2 @@
 
-  <table id="productTable"></table>
+  <table id="productTable" ></table>

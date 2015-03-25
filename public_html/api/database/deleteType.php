@@ -21,11 +21,13 @@ if(isset($_POST['productType'])){
       endforeach;
       $deleteAll = "DELETE FROM product
                     WHERE productType = '$prodType'";
-      $deleteAll -> execute();
+      $queryRecords = $dbh->prepare($deleteAll);
+      $queryRecords -> execute();
 
-     $deleteTypeQ = "DELETE FROM productType
+      $deleteTypeQ = "DELETE FROM productType
                      WHERE type = '$userType'";
-      $deleteTypeQ -> execute();
+       $delete = $dbh->prepare($deleteTypeQ);
+       $delete -> execute();
 
 
 } else {
