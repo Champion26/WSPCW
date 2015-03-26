@@ -111,7 +111,6 @@ function setProductSidebar(){
     var link = document.createElement("a");
     link.setAttribute("href", "#");
     link.setAttribute("id", productTypes[i]);
-    console.log(link.getAttribute("id"));
     var name = productTypes[i];
     var label = document.createTextNode(name);
     link.innerHTML = name;
@@ -150,7 +149,6 @@ function applyIndividualListener(type,x){
 function applyEventListeners(){
   for (var x = 0; x < productTypes.length; x++){
     var type = productTypes[x];
-    console.log(type);
     applyIndividualListener(type,x);
 
   }
@@ -180,7 +178,7 @@ function callbackAlert(response) {
 function submitChanges(e) {
   e.preventDefault();
   var prodCode = document.getElementById("pCode").value;
-  var prodName = document.getElementById("productN").value;
+  var prodName = document.getElementById("productNa").value;
   var desc = document.getElementById("description").value;
   var price = document.getElementById("price").value;
   var quantity = document.getElementById("quantity").value;
@@ -199,7 +197,7 @@ function submitChanges(e) {
     }
   );
   document.getElementById("pCode").value = "";
-  document.getElementById("productN").value = "";
+  document.getElementById("productNa").value = "";
   document.getElementById("description").value = "";
   document.getElementById("price").value = "";
   document.getElementById("quantity").value = "";
@@ -346,7 +344,7 @@ function getSearch(e) {
 
       } else if (searchResults.length > 0) {
         document.getElementById("pCode").value = searchResults[0][0];
-        document.getElementById("productN").value = searchResults[0][1];
+        document.getElementById("productNa").value = searchResults[0][1];
         document.getElementById("description").value = searchResults[0][2];
         document.getElementById("productType").value = searchResults[0][3];
         document.getElementById("price").value = searchResults[0][4];
@@ -789,8 +787,107 @@ function getTypes() {
     document.getElementById('types').innerHTML = options;
   }
 
+function createSetBar(){
+  var target = document.getElementById("productLineup");
+  var section = document.createElement("form");
+  for (var i = 0; i< productTypes.length; i++){
+    var label = document.createTextNode(productTypes[i]);
+    var textArea = document.createElement("p");
+    textArea.setAttribute("id", productTypes[i]);
+    textArea.appendChild(label);
+    section.appendChild(textArea);
+    var input = document.createElement("input");
+    input.setAttribute("type", "integer");
+    section.appendChild(input);
+    var breakPoint = document.createElement("br");
+    section.appendChild(breakPoint);
+  }
+  var submit = document.createElement("input");
+  submit.setAttribute("type", "submit");
+  submit.setAttribute("onclick", "setOrder(event)");
+  section.appendChild(submit);
+  target.appendChild(section);
+}
 
+function setOrder(e){
+  for (var i = 0; i < productTypes.length; i++){
+    var element = document.getElementById(productTypes[i]);
+    var value = element.value;
+    var place = productTypes.indexOf(productTypes[i]);
+    productTypes.splice(place, 1);
+    productTypes.splice(1, 0, value);
+  }
+}
 
+function createCanvas(){
+  console.log("working");
+  var target = document.getElementById("productLineup");
+  var section = document.createElement("section");
+  section.setAttribute("id", "order");
+  for (var i = 0; i < productTypes.length; i++){
+      var canvas = document.createElement("canvas");
+      canvas.setAttribute("data-order", i);
+      canvas.setAttribute("id", productTypes[i]);
+      canvas.setAttribute("ondrop", "drop(event)");
+      canvas.setAttribute("ondragstart", "drag(event)");
+      canvas.setAttribute("ondragover", "allowDrop(event)");
+      canvas.setAttribute("draggable", "true");
+      var ctx = canvas.getContext("2d");
+      ctx.font="20px Arial";
+      ctx.fillText(productTypes[i], 10, 50);
+      section.appendChild(canvas);
+  }
+  target.appendChild(section);
+}
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+  console.log(ev.target.getAttribute("id"));
+}
+function moveVariables(children){
+  console.log(children.length);
+  for (var i = 0; i < (children.length -1); i++){
+    var child = children[i].getAttribute("id");
+    console.log(child);
+
+    for(var x = 0; x < productTypes.length; x++){
+      var id = productTypes[x];
+
+      if (id === child){
+        var location = productTypes.indexOf(id);
+        productTypes.splice(location, 1);
+        productTypes.splice(i, 0, id);
+      //  console.log(productTypes[i], productTypes.indexOf(productTypes[i]));
+      }
+    }
+  }
+}
+function insertAfter(parentNode, newNode, target, children){
+     parentNode.insertBefore(newNode, target);
+     moveVariables(children);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  var object = document.getElementById(data);
+  var previous = ev.dataTransfer.setData("text", ev.target.id);
+  console.log(ev.target, document.getElementById(data).parentNode.getAttribute("id"));
+  //ev.target.appendChild(document.getElementById(data));
+  var children = document.getElementById("order").childNodes;
+  console.log(children);
+  var parentNode = document.getElementById("order");
+  console.log(document.getElementById("order"));
+  var node = ev.target;
+  console.log(parentNode, object, node);
+  insertAfter(parentNode, object, node, children);
+
+  //change array position
+}
 function setAdmin() {
   document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
 
@@ -820,6 +917,13 @@ function setAdmin() {
           grabElement(data, 'mainContent');
           setAdminFieldContent();
 
+        });
+      });
+      document.getElementById("setProductLineup").addEventListener("click", function(data) {
+        ajaxGet('api/database/productOrder.html', function(data) {
+          grabElement(data, 'mainContent');
+          //createSetBar();
+          createCanvas();
         });
       });
     });
@@ -1084,22 +1188,27 @@ function printProducts(type) {
         cellContent = item[0];
         var cellText = document.createTextNode(cellContent);
         cell.appendChild(cellText);
+        setTDEventListener(cell, item, i);
       } else if (j === 1) {
         cellContent = item[1];
         var cellText = document.createTextNode(cellContent);
         cell.appendChild(cellText);
+        setTDEventListener(cell, item, i);
       } else if (j === 2) {
         cellContent = item[2];
         var cellText = document.createTextNode(cellContent);
         cell.appendChild(cellText);
+        setTDEventListener(cell, item, i);
       } else if (j === 3) {
         cellContent = item[4];
         var cellText = document.createTextNode(cellContent);
         cell.appendChild(cellText);
+        setTDEventListener(cell, item, i);
       } else if (j === 4) {
         cellContent = item[5];
         var cellText = document.createTextNode(cellContent);
         cell.appendChild(cellText);
+        setTDEventListener(cell, item, i);
       } else if (j === 5) {
         var celButton = document.createElement("button");
         celButton.innerHTML = 'Add to Basket';
@@ -1123,6 +1232,7 @@ function printProducts(type) {
       }
 
       row.appendChild(cell);
+
     }
 
     // add the row to the end of the table body
@@ -1136,8 +1246,90 @@ function printProducts(type) {
 
 }
 
+function moveVariables(children){
+  console.log(children.length);
+  for (var i = 0; i < (children.length -1); i++){
+    var child = children[i].getAttribute("id");
+    console.log(child);
 
+    for(var x = 0; x < productTypes.length; x++){
+      var id = productTypes[x];
 
+      if (id === child){
+        var location = productTypes.indexOf(id);
+        productTypes.splice(location, 1);
+        productTypes.splice(i, 0, id);
+        //  console.log(productTypes[i], productTypes.indexOf(productTypes[i]));
+      }
+    }
+  }
+}
+function insertAfter(parentNode, newNode, target, children){
+  parentNode.insertBefore(newNode, target);
+  moveVariables(children);
+}
+
+function dropImage(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  var object = document.getElementById(data);
+  var target = ev.target.getAttribute("id");
+  if (target === "basketImage"){
+    var imageDetails = document.getElementById("productImage").getAttribute("data-detail");
+    fireBasketEvent(
+      JSON.parse(imageDetails),
+      1
+    );
+  }
+
+}
+function setTDEventListener(cell, item, i){
+  cell.addEventListener("click", function(){
+    createProductPage(item[0],item[1],item[2],item[4],item[5], i, item);
+  });
+}
+
+function createProductPage(productCode, productName, desc, price, quantity, i ,item){
+  ajaxGet('api/database/productPage.html', function(data) {
+    console.log("create");
+    grabElement(data, 'mainContent');
+    setProductPage(productCode, productName, desc, price, quantity, i, item);
+
+  });
+}
+
+function setProductPage(productCode, productName, desc, price, quantity, i, item){
+  console.log("set");
+  document.getElementById("productPageCode").innerHTML = productCode;
+  document.getElementById("productPageName").innerHTML = productName;
+  document.getElementById("productPageDesc").innerHTML= desc;
+  document.getElementById("productPagePrice").innerHTML = price;
+  document.getElementById("productPageQuantity").innerHTML = quantity;
+  createProductButton(item, i);
+  getButtons();
+
+}
+
+function createProductButton(item, i){
+  console.log("asd");
+  var celButton = document.createElement("button");
+  celButton.innerHTML = 'Add to Basket';
+  var name = "addButton" + i;
+  buttonList.push(name);
+  celButton.setAttribute("id", name);
+  var productObj = {
+    productCode: item[0],
+    productName: item[1],
+    productType: item[3],
+    description: item[2],
+    price: item[4],
+    quantity: item[5]
+  };
+  celButton.setAttribute("data-detail", JSON.stringify(productObj));
+  var details = celButton.getAttribute("data-detail");
+  document.getElementById("productImage").setAttribute("data-detail", details);
+  document.getElementById("productButton").appendChild(celButton);
+}
 
 
 function generateTable() {

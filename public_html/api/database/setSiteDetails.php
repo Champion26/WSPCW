@@ -6,6 +6,7 @@
 <form id="details">
   <fieldset>
   Site Tab Title:  <input type="text" id="tabTitle" name="tabTitle" ><br><br>
+  Site Main Colour: <input type="text" id="siteColour" name="siteColour"><br><br>
   <input type="button" value="Submit Changes" onclick="submitSiteEdits()">
 </fieldset>
 </form>

@@ -15,7 +15,7 @@
   <fieldset>
   <input type="hidden"  name="pCode" id="pCode" value=""><br>
   <br>
-  Product Name:  <input type="text" name="productN" id="productN" value="" > <br>
+  Product Name:  <input type="text" name="productNa" id="productNa" value="" > <br>
   <br>
   Description:  <input type="text"   name="description" id="description" value=""> <br>
   <br>

@@ -2,11 +2,23 @@ section {
 
         border-color: black;
 }
+section#productLineup{
+  width:200px;
+}
 p {
 	font-family: arial;
 	font-size: 90%;
         line-height: 150%;
 
+}
+tr:hover{
+  background-color: black;
+  color: white;
+}
+canvas{
+  width:200px;
+  height: 100px;
+  border: 1px solid;
 }
 
 [data-edit]:hover {
@@ -298,12 +310,25 @@ footer
 		clear: both;
 }
 
+img#basketImage{
+  width:200px;
+  height:200px;
+}
 
 #footerLinks li{
   display: inline;
  }
 #footerLinks a{
 	color:black;
+}
+img {
+  width:200px;
+  height:200px;
+}
+section#basketSection{
+  width:200px;
+  height:200px;
+  border:1px solid;
 }
 
 #basket a, img{
