@@ -25,6 +25,7 @@
   Price (£):  <input type="number" step="any" name="price" id="price" value="" > <br>
   <br>
   Quantity:  <input type="number"  name="quantity" id="quantity" value="" ><br><br>
+  Image Name: <input type="string" name="imageName" id="imageName" value=""<br><br>
 
   <input type="button" name='submitEdit' value="Submit" onclick="submitChanges(event)">
 

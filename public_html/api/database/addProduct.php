@@ -18,7 +18,8 @@ if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_P
      $productType = $_POST['productType'];
      $price = $_POST['productPrice'];
      $quantity = $_POST['productQuantity'];
-     $q = "INSERT INTO product(productCode, productName, description, productType, price, quantity) VALUES (:prodCode, :prodName, :description, :prodType, :price, :quantity)";
+     $location = $_POST['filepath'];
+     $q = "INSERT INTO product(productCode, productName, description, productType, price, quantity, location) VALUES (:prodCode, :prodName, :description, :prodType, :price, :quantity, :location)";
 
 
      $query = $dbh->prepare($q);
@@ -28,7 +29,7 @@ if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_P
      $query->bindValue(":prodType", $productType);
      $query->bindValue(":price", $price);
      $query->bindValue(":quantity", $quantity);
-
+     $query->bindValue(":location", $location);
 
      $query -> execute();
 

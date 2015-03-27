@@ -17,7 +17,7 @@ $i = 0;
 try {
   global $dbh;
   $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
-  $sql = "SELECT productCode, productName, productType.type AS type, description, price, quantity
+  $sql = "SELECT productCode, productName, productType.type AS type, description, price, quantity, location
           FROM product
           INNER JOIN producttype
           ON product.productType = productType.productTypeID;";
@@ -53,12 +53,12 @@ try {
 
           global $quantity;
           $quantity = $row ['quantity'];
-
+          $location = $row ['location'];
 
 
           global $addQuantity;
           $addQuantity = 1;
-          $product = array($prodCode, $prodName, $desc, $prodType, $price, $quantity);
+          $product = array($prodCode, $prodName, $desc, $prodType, $price, $quantity,$location);
           $range[] = $product;
           $i++;
         endforeach;

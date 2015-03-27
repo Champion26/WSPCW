@@ -7,11 +7,11 @@ var buttonList = [];
 var searchResults = [];
 var searchArray = [];
 var userSearch = [];
-var productTypes= [];
+var productTypes = [];
 var siteDescription;
-var siteDetails=[];
-var changesMade=[];
-var dbRetrievedDetails=[];
+var siteDetails = [];
+var changesMade = [];
+var dbRetrievedDetails = [];
 
 function addToBasket(e) {
   var details = JSON.parse(e.currentTarget.dataset.detail);
@@ -67,10 +67,10 @@ function setHome() {
       document.getElementById("description").addEventListener("click", function(data) {
         ajaxGet('api/database/description.html', function(data) {
           grabElement(data, 'mainContent');
-          if (siteDescription === undefined){
+          if (siteDescription === undefined) {
             document.getElementById("siteDescription").innerHTML = "A description has not been set.";
-          }else {
-          document.getElementById("siteDescription").innerHTML = siteDescription;
+          } else {
+            document.getElementById("siteDescription").innerHTML = siteDescription;
           }
           console.log(siteDescription);
         });
@@ -102,11 +102,11 @@ function setSearch() {
   }, false);
 }
 
-function setProductSidebar(){
+function setProductSidebar() {
 
   var target = document.getElementById("productSidebar");
   var list = document.createElement("ul");
-  for (var i = 0; i < productTypes.length; i++){
+  for (var i = 0; i < productTypes.length; i++) {
     var listElement = document.createElement("li");
     var link = document.createElement("a");
     link.setAttribute("href", "#");
@@ -120,9 +120,10 @@ function setProductSidebar(){
   target.appendChild(list);
   applyEventListeners();
 }
-function applyIndividualListener(type,x){
 
-  document.getElementById(productTypes[x]).addEventListener("click", function(data){
+function applyIndividualListener(type, x) {
+
+  document.getElementById(productTypes[x]).addEventListener("click", function(data) {
     var productType = [];
     for (var i = 0; i < productArray.length; i++) {
       var product = productArray[i];
@@ -131,28 +132,29 @@ function applyIndividualListener(type,x){
         productType.push(product);
       }
     }
-    if (productType.length === 0){
+    if (productType.length === 0) {
       alert("There are no products for this category.");
-    } else{
-    ajaxGet('api/database/getProductTable.php', function(data) {
-      grabElement(data, 'mainContent');
-      console.log(type);
-      document.getElementById("productTitle").innerHTML = type;
-      printProducts(type);
-      getButtons();
-    });
-  }
-});
+    } else {
+      ajaxGet('api/database/getProductTable.php', function(data) {
+        grabElement(data, 'mainContent');
+        console.log(type);
+        document.getElementById("productTitle").innerHTML = type;
+        printProducts(type);
+        getButtons();
+      });
+    }
+  });
 }
 
 
-function applyEventListeners(){
-  for (var x = 0; x < productTypes.length; x++){
+function applyEventListeners() {
+  for (var x = 0; x < productTypes.length; x++) {
     var type = productTypes[x];
-    applyIndividualListener(type,x);
+    applyIndividualListener(type, x);
 
   }
 }
+
 function setProducts() {
 
   document.getElementById("products").addEventListener("click", function(data) { /*products sidebar & page */
@@ -183,84 +185,90 @@ function submitChanges(e) {
   var price = document.getElementById("price").value;
   var quantity = document.getElementById("quantity").value;
   var type = document.getElementById("productType").value;
-  if (productTypes.indexOf(type) === -1){
-    alert(type+" is not a valid type.");
-  }else{
+  var location = "images/" + document.getElementById("imageName").value;
+  console.log(location);
+  if (productTypes.indexOf(type) === -1) {
+    alert(type + " is not a valid type.");
+  } else {
 
-  var productDetails = "productCode=" + prodCode + "&productName=" + prodName + "&description=" + desc + "&productPrice=" + price + "&productQuantity=" + quantity + "&productType=" + type;
-  console.log(productDetails);
-  postJSON(
-    productDetails,
-    'api/database/updateProduct.php',
-    function(data) {
+    var productDetails = "productCode=" + prodCode + "&productName=" + prodName + "&description=" + desc + "&productPrice=" + price + "&productQuantity=" + quantity + "&productType=" + type + "&location=" + location;
+    console.log(productDetails);
+    postJSON(
+      productDetails,
+      'api/database/updateProduct.php',
+      function(data) {
 
-    }
-  );
-  document.getElementById("pCode").value = "";
-  document.getElementById("productNa").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("price").value = "";
-  document.getElementById("quantity").value = "";
-  document.getElementById("productType").value = "";
-  alert("You have updated " + prodName + ".");
-}
-}
-function makeEditable(id){
-    var change = document.getElementById(id);
-   change.addEventListener("click", function(){
-      change.setAttribute("contenteditable", "true");
-  });
+      }
+    );
+    document.getElementById("pCode").value = "";
+    document.getElementById("productNa").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("quantity").value = "";
+    document.getElementById("productType").value = "";
+    document.getElementById("imageName").value = "";
+    alert("You have updated " + prodName + ".");
   }
-function applyEdits(element){
-  element.addEventListener("click", function(){
+}
+
+function makeEditable(id) {
+  var change = document.getElementById(id);
+  change.addEventListener("click", function() {
+    change.setAttribute("contenteditable", "true");
+  });
+}
+
+function applyEdits(element) {
+  element.addEventListener("click", function() {
     element.setAttribute("contenteditable", "true");
 
 
   });
 }
-function postChanges(changed){
+
+function postChanges(changed) {
   postJSON(
     changed,
     'api/database/updateDetail.php',
-    function(data) {
-    }
+    function(data) {}
   );
 }
-function sendDBChanges(e){
+
+function sendDBChanges(e) {
   console.log("running");
-  if (e.keyCode == 83 && e.shiftKey){
+  if (e.keyCode == 83 && e.shiftKey) {
     console.log("accepted");
-    for (var i =0; i < changesMade.length; i++){
+    for (var i = 0; i < changesMade.length; i++) {
       var id = changesMade[i][0];
       var content = changesMade[i][1];
-      var changed = "id="+id+"&content="+content;
+      var changed = "id=" + id + "&content=" + content;
       postChanges(changed);
     }
   }
 }
 
-function sendChanges(element){
+function sendChanges(element) {
   var id = element.getAttribute("id");
   var content = element.innerHTML;
   var found = false;
-  for (var i =0; i < changesMade.length; i++){
-    if (id === changesMade[i][0]){
-      found =true;
+  for (var i = 0; i < changesMade.length; i++) {
+    if (id === changesMade[i][0]) {
+      found = true;
       break;
     }
   }
-  if (found === false){
-    var changes =[id,content];
+  if (found === false) {
+    var changes = [id, content];
     changesMade.push(changes);
   }
-  console.log(changesMade);
+
 
 
 }
 
-function saveChanges(element){
-  element.addEventListener("click", function(){
-    element.addEventListener("keypress", function(){
+function saveChanges(element) {
+  element.addEventListener("click", function() {
+    element.addEventListener("keypress", function() {
       setTimeout(sendChanges, 3000, element);
     });
 
@@ -268,7 +276,7 @@ function saveChanges(element){
   });
 }
 
-function getDetails(){
+function getDetails() {
   getJSON("api/database/selectDetails.php", function(data) {
     console.log("details");
     addDetails(data);
@@ -276,37 +284,37 @@ function getDetails(){
   });
 }
 
-function addDetails(data){
-  for (var i = 0; i < data.length ; i++){
+function addDetails(data) {
+  for (var i = 0; i < data.length; i++) {
     dbRetrievedDetails.push(data[i]);
   }
   loadSiteDetails();
 }
 
-function loadSiteDetails(){
+function loadSiteDetails() {
   var all = document.getElementsByTagName("*");
   console.log("working");
-  for (var i = 0; i < all.length; i++){
+  for (var i = 0; i < all.length; i++) {
     var element = all[i];
 
-    if (element.hasAttribute("data-edit")){
-       for (var x = 0; x < dbRetrievedDetails.length; x++){
-         var id =element.getAttribute("id");
-         if (id === dbRetrievedDetails[x][0]){
-           element.innerHTML = dbRetrievedDetails[x][1];
-         }
-       }
+    if (element.hasAttribute("data-edit")) {
+      for (var x = 0; x < dbRetrievedDetails.length; x++) {
+        var id = element.getAttribute("id");
+        if (id === dbRetrievedDetails[x][0]) {
+          element.innerHTML = dbRetrievedDetails[x][1];
+        }
+      }
     }
   }
 }
 
-function findEditableElements(){
+function findEditableElements() {
   var all = document.getElementsByTagName("*");
 
-  for (var i = 0; i < all.length; i++){
+  for (var i = 0; i < all.length; i++) {
     var element = all[i];
 
-    if (element.hasAttribute("data-edit")){
+    if (element.hasAttribute("data-edit")) {
 
       applyEdits(element);
       saveChanges(element);
@@ -315,18 +323,19 @@ function findEditableElements(){
   }
 }
 
-function editable(){
-    var classname = document.getElementsByClassName("editable");
-    console.log(classname.length);
+function editable() {
+  var classname = document.getElementsByClassName("editable");
+  console.log(classname.length);
 
-    for(var i=0;i<classname.length;i++){
-        classname[i].addEventListener('click' ,function(){
-            classname[i].setAttribute("contenteditable", "true");
-        });
-    }
+  for (var i = 0; i < classname.length; i++) {
+    classname[i].addEventListener('click', function() {
+      classname[i].setAttribute("contenteditable", "true");
+    });
+  }
 }
+
 function getSearch(e) {
-  searchResults=[];
+  searchResults = [];
   e.preventDefault();
   var prodCode = document.getElementById("productCode").value;
 
@@ -339,51 +348,52 @@ function getSearch(e) {
 
       if (searchResults.length > 1) {
         alert("There are too many results to display.");
-      } else if (searchResults.length === 0){
+      } else if (searchResults.length === 0) {
         alert("There are no results for " + prodCode);
 
       } else if (searchResults.length > 0) {
+
         document.getElementById("pCode").value = searchResults[0][0];
         document.getElementById("productNa").value = searchResults[0][1];
         document.getElementById("description").value = searchResults[0][2];
-        document.getElementById("productType").value = searchResults[0][3];
+        var type = productTypes[searchResults[0][3]];
+        document.getElementById("productType").value = type;
         document.getElementById("price").value = searchResults[0][4];
         document.getElementById("quantity").value = searchResults[0][5];
-
+        document.getElementById("imageName").value = searchResults[0][6];
       }
     }
   );
 }
 
-function addPreset(presetElement){
+function addPreset(presetElement) {
 
   postJSON(
     presetElement,
     'api/database/addSitePreset.php',
-    function(data) {
-    }
+    function(data) {}
   );
 }
 
-function setAllContent(){
+function setAllContent() {
   console.log("setting");
   var all = document.getElementsByTagName("*");
 
-  for (var i = 0; i < all.length; i++){
+  for (var i = 0; i < all.length; i++) {
     var element = all[i];
-    if (element.hasAttribute("data-edit")){
+    if (element.hasAttribute("data-edit")) {
       var id = element.getAttribute("id");
       var content = element.innerHTML;
       var found = false;
-      for (var x= 0; x < siteDetails.length; x++){
-        if (id === siteDetails[x][0]){
+      for (var x = 0; x < siteDetails.length; x++) {
+        if (id === siteDetails[x][0]) {
           found = true;
           break;
         }
       }
       console.log(found);
-      if (found === false){
-        var presetElement = "id="+id+"&content="+content;
+      if (found === false) {
+        var presetElement = "id=" + id + "&content=" + content;
         console.log(presetElement);
         var elementArray = [id, content];
         siteDetails.push(elementArray);
@@ -517,16 +527,16 @@ function searchByCode(e) {
 
 }
 
-function showEditable(e){
+function showEditable(e) {
 
-  if (e.keyCode == 69 && e.shiftKey){
+  if (e.keyCode == 69 && e.shiftKey) {
 
     var all = document.getElementsByTagName("*");
 
-    for (var i = 0; i < all.length; i++){
+    for (var i = 0; i < all.length; i++) {
       var element = all[i];
-      if (element.hasAttribute("data-edit")){
-        element.style.border="thick solid red";
+      if (element.hasAttribute("data-edit")) {
+        element.style.border = "thick solid red";
 
 
       }
@@ -535,15 +545,15 @@ function showEditable(e){
   document.addEventListener("keyup", resetEditables);
 }
 
-function resetEditables(e){
-  if (e.keyCode == 69 && e.shiftKey){
+function resetEditables(e) {
+  if (e.keyCode == 69 && e.shiftKey) {
     var all = document.getElementsByTagName("*");
 
-    for (var i = 0; i < all.length; i++){
+    for (var i = 0; i < all.length; i++) {
       var element = all[i];
-      if (element.hasAttribute("data-edit")){
-        element.style.border="0px";
-        element.style.borderColor="";
+      if (element.hasAttribute("data-edit")) {
+        element.style.border = "0px";
+        element.style.borderColor = "";
       }
     }
   }
@@ -659,26 +669,75 @@ function addProductType(e) {
   e.preventDefault();
   var prodType = document.getElementById("productType").value;
 
-    var productDetails = "productType=" + prodType;
-    console.log(productDetails);
-    postJSON(
-      productDetails,
-      'api/database/addType.php',
-      function(data) {
-        callbackAlert(data);
-        console.log("done");
+  var productDetails = "productType=" + prodType;
+  console.log(productDetails);
+  postJSON(
+    productDetails,
+    'api/database/addType.php',
+    function(data) {
+      callbackAlert(data);
+      console.log("done");
+    }
+  );
+  alert("You have added " + prodType + " to the system.");
+  refreshTypes();
+
+  document.getElementById("productType").value = "";
+}
+
+
+function sendImage() {
+
+  var form = document.getElementById('addProduct');
+  var fileSelect = document.getElementById('imageFile');
+  var uploadButton = document.getElementById('sendButton');
+  uploadButton.onclick = function(event) {
+    event.preventDefault();
+
+    // Update button text.
+    uploadButton.innerHTML = 'Uploading...';
+    var filename;
+    var files = fileSelect.files;
+    console.log(files.legnth);
+    if (files.length ===0){
+      getResult(event, filename);
+    } else{
+    var formData = new FormData();
+    for (var i = 0; i < 1; i++) {
+      var file = files[i];
+
+      // Check the file type.
+      if (!file.type.match('image.*')) {
+        continue;
       }
-    );
-    alert("You have added " + prodType + " to the system.");
-    refreshTypes();
 
-    document.getElementById("productType").value = "";
+      // Add the file to the request.
+      formData.append('images', file, file.name);
+      filename = file.name;
+
+    }
+    var all = formData.getAll('images');
+    console.log(all);
+
+    console.log(formData);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'uploader.php', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        // File(s) uploaded.
+        uploadButton.innerHTML = 'Upload';
+        getResult(event, filename);
+      } else {
+        alert('An error occurred!');
+      }
+    };
+    xhr.send(formData);
   }
+};
+}
 
 
-
-
-function getResult(e) {
+function getResult(e, filename) {
   e.preventDefault();
   var prodCode = document.getElementById("productCode").value;
   var prodName = document.getElementById("productName").value;
@@ -686,10 +745,21 @@ function getResult(e) {
   var price = document.getElementById("price").value;
   var quantity = document.getElementById("quantity").value;
   var type = document.getElementById("productType").value;
-  type = type.toLowerCase();
-  if (productTypes.indexOf(type) === -1){
-    alert(type+" is not a valid type.");
+  var image = document.getElementById("imageFile").value;
+  console.log(filename);
+  var filepath;
+  if (filename===undefined){
+    filepath= "images/noProduct.jpg";
   }else{
+    filepath = "images/" + filename;
+  }
+
+
+
+  if (productTypes.indexOf(type) === -1) {
+    alert(type + " is not a valid type.");
+  } else {
+
     type = productTypes.indexOf(type);
     console.log(type);
     var addProduct = {
@@ -700,7 +770,7 @@ function getResult(e) {
       productQuantity: quantity,
       productType: type
     };
-    var productDetails = "productCode=" + prodCode + "&productName=" + prodName + "&description=" + desc + "&productPrice=" + price + "&productQuantity=" + quantity + "&productType=" + type;
+    var productDetails = "productCode=" + prodCode + "&productName=" + prodName + "&description=" + desc + "&productPrice=" + price + "&productQuantity=" + quantity + "&productType=" + type + "&filepath=" + filepath;
     console.log(productDetails);
     postJSON(
       productDetails,
@@ -719,6 +789,8 @@ function getResult(e) {
     document.getElementById("price").value = "";
     document.getElementById("quantity").value = "";
     document.getElementById("productType").value = "";
+
+
   }
 }
 
@@ -778,19 +850,19 @@ function submitSiteEdits() {
 }
 
 function getTypes() {
-    var options = '';
+  var options = '';
 
-    for (var x = 0; x < productTypes.length; x++) {
-      options += '<option value="' + productTypes[x] + '" />';
-    }
-
-    document.getElementById('types').innerHTML = options;
+  for (var x = 0; x < productTypes.length; x++) {
+    options += '<option value="' + productTypes[x] + '" />';
   }
 
-function createSetBar(){
+  document.getElementById('types').innerHTML = options;
+}
+
+function createSetBar() {
   var target = document.getElementById("productLineup");
   var section = document.createElement("form");
-  for (var i = 0; i< productTypes.length; i++){
+  for (var i = 0; i < productTypes.length; i++) {
     var label = document.createTextNode(productTypes[i]);
     var textArea = document.createElement("p");
     textArea.setAttribute("id", productTypes[i]);
@@ -809,8 +881,8 @@ function createSetBar(){
   target.appendChild(section);
 }
 
-function setOrder(e){
-  for (var i = 0; i < productTypes.length; i++){
+function setOrder(e) {
+  for (var i = 0; i < productTypes.length; i++) {
     var element = document.getElementById(productTypes[i]);
     var value = element.value;
     var place = productTypes.indexOf(productTypes[i]);
@@ -819,23 +891,30 @@ function setOrder(e){
   }
 }
 
-function createCanvas(){
+function dropFile(e){
+     e.preventDefault();
+     var dt = e.dataTransfer;
+     var files = dt.files;
+     document.getElementById("imageFile").files = files;
+}
+
+function createCanvas() {
   console.log("working");
   var target = document.getElementById("productLineup");
   var section = document.createElement("section");
   section.setAttribute("id", "order");
-  for (var i = 0; i < productTypes.length; i++){
-      var canvas = document.createElement("canvas");
-      canvas.setAttribute("data-order", i);
-      canvas.setAttribute("id", productTypes[i]);
-      canvas.setAttribute("ondrop", "drop(event)");
-      canvas.setAttribute("ondragstart", "drag(event)");
-      canvas.setAttribute("ondragover", "allowDrop(event)");
-      canvas.setAttribute("draggable", "true");
-      var ctx = canvas.getContext("2d");
-      ctx.font="20px Arial";
-      ctx.fillText(productTypes[i], 10, 50);
-      section.appendChild(canvas);
+  for (var i = 0; i < productTypes.length; i++) {
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("data-order", i);
+    canvas.setAttribute("id", productTypes[i]);
+    canvas.setAttribute("ondrop", "drop(event)");
+    canvas.setAttribute("ondragstart", "drag(event)");
+    canvas.setAttribute("ondragover", "allowDrop(event)");
+    canvas.setAttribute("draggable", "true");
+    var ctx = canvas.getContext("2d");
+    ctx.font = "20px Arial";
+    ctx.fillText(productTypes[i], 10, 50);
+    section.appendChild(canvas);
   }
   target.appendChild(section);
 }
@@ -848,27 +927,29 @@ function drag(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
   console.log(ev.target.getAttribute("id"));
 }
-function moveVariables(children){
+
+function moveVariables(children) {
   console.log(children.length);
-  for (var i = 0; i < (children.length -1); i++){
+  for (var i = 0; i < (children.length - 1); i++) {
     var child = children[i].getAttribute("id");
     console.log(child);
 
-    for(var x = 0; x < productTypes.length; x++){
+    for (var x = 0; x < productTypes.length; x++) {
       var id = productTypes[x];
 
-      if (id === child){
+      if (id === child) {
         var location = productTypes.indexOf(id);
         productTypes.splice(location, 1);
         productTypes.splice(i, 0, id);
-      //  console.log(productTypes[i], productTypes.indexOf(productTypes[i]));
+        //  console.log(productTypes[i], productTypes.indexOf(productTypes[i]));
       }
     }
   }
 }
-function insertAfter(parentNode, newNode, target, children){
-     parentNode.insertBefore(newNode, target);
-     moveVariables(children);
+
+function insertAfter(parentNode, newNode, target, children) {
+  parentNode.insertBefore(newNode, target);
+  moveVariables(children);
 }
 
 function drop(ev) {
@@ -888,6 +969,7 @@ function drop(ev) {
 
   //change array position
 }
+
 function setAdmin() {
   document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
 
@@ -897,6 +979,7 @@ function setAdmin() {
         ajaxGet('api/database/addJSON.html', function(data) {
           grabElement(data, 'mainContent');
           getTypes();
+          sendImage();
         });
       });
       document.getElementById("addType").addEventListener("click", function(data) {
@@ -990,7 +1073,9 @@ function pageLoad() {
     grabElement(data, 'mainContent');
   });
   getJSON("api/database/selectTypeJSON.php", function(data) {
+    console.log(data);
     getProducts(data);
+
   });
   getJSON("api/database/selectProductType.php", function(data) {
     getProductTypes(data);
@@ -998,7 +1083,7 @@ function pageLoad() {
   getDetails();
 }
 
-function refreshTypes(){
+function refreshTypes() {
   getJSON("api/database/selectProductType.php", function(data) {
     getProductTypes(data);
   });
@@ -1123,12 +1208,12 @@ var countItems = function(e) {
 
 document.addEventListener('basket', countItems);
 
-function getProductTypes(response){
+function getProductTypes(response) {
   for (var i = 0; i < response.length; i++) {
     var type = response[i][1];
     productTypes.push(type);
-}
-console.log(productTypes);
+  }
+  console.log(productTypes);
 }
 
 function getProducts(response) {
@@ -1136,7 +1221,8 @@ function getProducts(response) {
     var product = response[i];
     productArray.push(product);
   }
-};
+  console.log(productArray);
+}
 
 function printProducts(type) {
   // get the reference for the body
@@ -1167,6 +1253,7 @@ function printProducts(type) {
   }
   tblBody.appendChild(tableTitles);
   var productType = [];
+  console.log(productArray);
   for (var i = 0; i < productArray.length; i++) {
     var product = productArray[i];
     var prodType = product[3];
@@ -1181,9 +1268,11 @@ function printProducts(type) {
     var item = productType[i];
     for (var j = 0; j <= 5; j++) {
       var cell = document.createElement("td");
+      console.log(productType);
       // Create a <td> element and a text node, make the text
       // node the contents of the <td>, and put the <td> at
       // the end of the table row
+
       if (j === 0) {
         cellContent = item[0];
         var cellText = document.createTextNode(cellContent);
@@ -1246,16 +1335,16 @@ function printProducts(type) {
 
 }
 
-function moveVariables(children){
+function moveVariables(children) {
   console.log(children.length);
-  for (var i = 0; i < (children.length -1); i++){
+  for (var i = 0; i < (children.length - 1); i++) {
     var child = children[i].getAttribute("id");
     console.log(child);
 
-    for(var x = 0; x < productTypes.length; x++){
+    for (var x = 0; x < productTypes.length; x++) {
       var id = productTypes[x];
 
-      if (id === child){
+      if (id === child) {
         var location = productTypes.indexOf(id);
         productTypes.splice(location, 1);
         productTypes.splice(i, 0, id);
@@ -1264,7 +1353,8 @@ function moveVariables(children){
     }
   }
 }
-function insertAfter(parentNode, newNode, target, children){
+
+function insertAfter(parentNode, newNode, target, children) {
   parentNode.insertBefore(newNode, target);
   moveVariables(children);
 }
@@ -1274,7 +1364,7 @@ function dropImage(ev) {
   var data = ev.dataTransfer.getData("text");
   var object = document.getElementById(data);
   var target = ev.target.getAttribute("id");
-  if (target === "basketImage"){
+  if (target === "basketImage") {
     var imageDetails = document.getElementById("productImage").getAttribute("data-detail");
     fireBasketEvent(
       JSON.parse(imageDetails),
@@ -1283,34 +1373,48 @@ function dropImage(ev) {
   }
 
 }
-function setTDEventListener(cell, item, i){
-  cell.addEventListener("click", function(){
-    createProductPage(item[0],item[1],item[2],item[4],item[5], i, item);
+
+function setTDEventListener(cell, item, i) {
+  cell.addEventListener("click", function() {
+    createProductPage(item[0], item[1], item[2], item[4], item[5], i, item, item[6]);
   });
 }
 
-function createProductPage(productCode, productName, desc, price, quantity, i ,item){
+function createProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
   ajaxGet('api/database/productPage.html', function(data) {
     console.log("create");
     grabElement(data, 'mainContent');
-    setProductPage(productCode, productName, desc, price, quantity, i, item);
+    setProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation);
 
   });
 }
 
-function setProductPage(productCode, productName, desc, price, quantity, i, item){
-  console.log("set");
+function setProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
   document.getElementById("productPageCode").innerHTML = productCode;
   document.getElementById("productPageName").innerHTML = productName;
-  document.getElementById("productPageDesc").innerHTML= desc;
+  document.getElementById("productPageDesc").innerHTML = desc;
   document.getElementById("productPagePrice").innerHTML = price;
   document.getElementById("productPageQuantity").innerHTML = quantity;
+  var path;
+  var stringExample = typeof "sdaasd";
+  var standardPath = typeof imageLocation;
+  console.log(imageLocation.indexOf(".jpg"));
+  if ((imageLocation.indexOf(".jpg") >0) || (imageLocation.indexOf(".png"))>0 ){
+
+    path = "images/"+imageLocation;
+  } else{
+
+    path = "images/noProduct.jpg";
+  }
+
+
+  document.getElementById("productImage").setAttribute("src", path);
   createProductButton(item, i);
   getButtons();
 
 }
 
-function createProductButton(item, i){
+function createProductButton(item, i) {
   console.log("asd");
   var celButton = document.createElement("button");
   celButton.innerHTML = 'Add to Basket';
@@ -1488,5 +1592,6 @@ window.onload = function() {
   setPage();
   pageLoad();
   searchEvent();
+  console.log(productArray);
 
 };

@@ -1,7 +1,7 @@
 
 <h2 id="addProductTitle" data-edit="">Add Product</h2>
 
-<form id="addProduct" data-edit="" >
+<form id="addProduct" method="POST">
   <fieldset>
   Product Code:  <input type="text" id="productCode" name="productCode" ><br>
   <br>
@@ -15,6 +15,10 @@
   Price (£):  <input type="number" step="any" id="price" name="price" ><br>
   <br>
   Quantity:  <input type="number" id="quantity" name="quantity"><br><br>
-  <input type="button" value="Add" onclick="getResult(event)">
+  <br>
+  Image: <input type="file" id="imageFile" size="60" value=""><br><br>
+  <p data-edit="">Please drag the image file into the area below or manually select the file above.</p>
+  <canvas id="imageCanvas" ondragover="allowDrop(event)" ondrop="dropFile(event)"></canvas>
+  <input type="button" id="sendButton" name="sendButton" value="Add">
 </fieldset>
 </form>

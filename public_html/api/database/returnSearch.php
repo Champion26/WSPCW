@@ -16,8 +16,9 @@ if(isset($_POST['productCode'])){
     $prodType = NULL;
     $price = NULL;
     $quantity = NULL;
+    $location = NULL;
     $db = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
-    $sql = "SELECT productCode, productName, productType, description, price, quantity
+    $sql = "SELECT productCode, productName, productType, description, price, quantity, location
             FROM product
             WHERE productCode = '$prodCode';";
     foreach ($db->query($sql) as $row) :
@@ -28,11 +29,12 @@ if(isset($_POST['productCode'])){
       $prodType = $row ['productType'];
       $price = $row ['price'];
       $quantity = $row ['quantity'];
-      $product = array($prodCode, $prodName, $desc, $prodType, $price, $quantity);
+      $location = $row ['location'];
+      $product = array($prodCode, $prodName, $desc, $prodType, $price, $quantity, $location);
       $range[] = $product;
     endforeach;
 
     echo json_encode($range);
     $db = null;
   }
-  ?>
+?>

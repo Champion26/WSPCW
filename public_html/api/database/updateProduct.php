@@ -18,8 +18,10 @@ if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_P
      $productType = $_POST['productType'];
      $price = $_POST['productPrice'];
      $quantity = $_POST['productQuantity'];
+     $location = $_POST['location'];
+     echo $location;
      $q = "UPDATE product
-     SET productCode = :prodCode, productName = :prodName, description = :description, productType = :prodType, price = :price, quantity= :quantity
+     SET productCode = :prodCode, productName = :prodName, description = :description, productType = :prodType, price = :price, quantity= :quantity, location= :location
      WHERE productCode = :prodCode;";
 
 
@@ -30,6 +32,7 @@ if(isset($_POST['productCode'],$_POST['productName'], $_POST['description'], $_P
      $query->bindValue(":prodType", $productType);
      $query->bindValue(":price", $price);
      $query->bindValue(":quantity", $quantity);
+     $query->bindValue(":location", $location);
 
 
      $query -> execute();
