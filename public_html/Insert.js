@@ -12,6 +12,14 @@ var siteDescription;
 var siteDetails = [];
 var changesMade = [];
 var dbRetrievedDetails = [];
+var availableColours = ["aqua", "black", "blue", "fuchsia", "gray", "green", "lime", "maroon", "navy", "olive", "orange", "purple", "red", "silver", "teal", "white",  "yellow"];
+var changableElements = ["table", "th", "td", "nav", "form"];
+var pageColour= "green";
+var textColour = "black";
+var navColour = "white";
+var headingColour = "black";
+var imageState = true;
+
 
 function addToBasket(e) {
   var details = JSON.parse(e.currentTarget.dataset.detail);
@@ -215,12 +223,14 @@ function makeEditable(id) {
   var change = document.getElementById(id);
   change.addEventListener("click", function() {
     change.setAttribute("contenteditable", "true");
+    change.setAttribute("ondrop", "dropTXTFile(event)");
   });
 }
 
 function applyEdits(element) {
   element.addEventListener("click", function() {
     element.setAttribute("contenteditable", "true");
+    element.setAttribute("ondrop", "dropTXTFile(event)");
 
 
   });
@@ -230,18 +240,21 @@ function postChanges(changed) {
   postJSON(
     changed,
     'api/database/updateDetail.php',
-    function(data) {}
+    function(data) {
+      alert("Your changes have been saved.");
+    }
   );
 }
 
 function sendDBChanges(e) {
   console.log("running");
   if (e.keyCode == 83 && e.shiftKey) {
-    console.log("accepted");
+    console.log("accepted", changesMade.length);
     for (var i = 0; i < changesMade.length; i++) {
       var id = changesMade[i][0];
       var content = changesMade[i][1];
       var changed = "id=" + id + "&content=" + content;
+      console.log("posting");
       postChanges(changed);
     }
   }
@@ -267,9 +280,10 @@ function sendChanges(element) {
 }
 
 function saveChanges(element) {
+
   element.addEventListener("click", function() {
     element.addEventListener("keypress", function() {
-      setTimeout(sendChanges, 3000, element);
+      setTimeout(sendChanges, 10000, element);
     });
 
 
@@ -318,6 +332,9 @@ function findEditableElements() {
 
       applyEdits(element);
       saveChanges(element);
+      element.setAttribute("ondrop", "dropTXTFile(event)");
+      element.setAttribute("ondragover", "allowDrop(event)");
+
 
     }
   }
@@ -330,6 +347,7 @@ function editable() {
   for (var i = 0; i < classname.length; i++) {
     classname[i].addEventListener('click', function() {
       classname[i].setAttribute("contenteditable", "true");
+
     });
   }
 }
@@ -839,16 +857,112 @@ function setOffers() {
 function setAdminFieldContent() {
   console.log(document.getElementById("pageTitle").innerHTML);
   document.getElementById("tabTitle").value = document.getElementById("title").innerHTML;
-  document.getElementById("mainTitle").value = document.getElementById("pageTitle").innerHTML;
-}
+  document.getElementById("siteColour").value =  pageColour;
+  document.getElementById("standardText").value = textColour;
+  document.getElementById("navText").value = navColour;
+  document.getElementById("headingText").value = headingColour;
+  console.log(imageState);
+  var radio = document.getElementById("imageState");
+  if (imageState === true){
+    radio.checked = "true";
+  }
 
+
+}
+function setAdminAfterColourChange(){
+
+        ajaxGet('api/database/setSiteDetails.php', function(data) {
+          grabElement(data, 'mainContent');
+          setAdminFieldContent();
+        });
+        ajaxGet('api/structure/head.php', function(data) { /*Defines file to grab*/
+          grabElement(data, 'head'); /*Sets where to put file*/
+        });
+        ajaxGet('api/structure/footer.php', function(data) {
+          grabElement(data, 'footerLinks');
+        });
+        ajaxGet('api/structure/topNav.php', function(data) {
+          grabElement(data, 'topNav');
+          setHome();
+          setProducts();
+          setBasket();
+          setAdmin();
+          setSearch();
+        });
+
+}
 function submitSiteEdits() {
+  console.log("running");
   var tabTitle = document.getElementById("tabTitle").value;
-
+  var siteColour = document.getElementById("siteColour").value;
+  var standardText = document.getElementById("standardText").value;
+  var navText = document.getElementById("navText").value;
+  var headingText = document.getElementById("headingText").value;
+  var state = document.getElementById("imageState");
+  console.log(state.checked);
+  if (state.checked){
+    imageState = true;
+  } else{
+    imageState = false;
+  }
   document.getElementById("title").innerHTML = tabTitle;
+  console.log(availableColours.indexOf(siteColour));
+  if (availableColours.indexOf(siteColour) === -1){
+    alert("One of there colours is not correct.");
+    var colourList;
+    for (var i = 0; i < availableColours.length; i++){
+        colourList += ", "+availableColours[i];
+    }
+    document.getElementById("possibleColours").innerHTML = "The possible colours are "+colourList+".";
+  } else{
+    pageColour = siteColour;
+    textColour = standardText;
+    navColour = navText;
+    headingColour = headingText;
+    colourDetails = "pageColour="+pageColour+"&textColour="+textColour+"&navColour="+navColour+"&headingColour="+headingColour;
+    postJSON(
+      colourDetails,
+      'api/database/updateColourScheme.php',
+      function(data) {
+          alert("The site details have been updated.");
+      }
+    );
+    setAdminAfterColourChange();
+    console.log(pageColour, textColour, navColour);
+  }
+}
+function setColour(colour, textColour, navColour, headingColour){
+  var tables = document.querySelectorAll("table", "td", "th");
+  var th = document.getElementsByTagName("th");
+  var nav = document.getElementsByTagName("a");
+  var form = document.getElementsByTagName("form");
+
+  tagArray(tables, colour, "borderColor");
+  tagArray(th, colour, "borderColor");
+  tagArray(form, colour, "borderColor");
+  tagArray(th, colour, "backgroundColor");
+  tagArray(nav, colour, "backgroundColor");
+  var text = document.querySelectorAll("p","td");
+  var headings = document.querySelectorAll("h1", "h2", "h3", "h4");
+  tagArray(text, textColour, "color");
+  tagArray(headings, headingColour, "color");
+  tagArray(nav, navColour, "color");
 
 }
 
+function tagArray(array, colour, option){
+  for (var i = 0; i < array.length; i++){
+    var element = array[i];
+    if (option === "borderColor"){
+      element.style.borderColor = colour;
+    }else if (option === "backgroundColor"){
+      element.style.backgroundColor = colour;
+    } else if(option === "color"){
+      element.style.color = colour;
+    }
+
+  }
+}
 function getTypes() {
   var options = '';
 
@@ -889,6 +1003,33 @@ function setOrder(e) {
     productTypes.splice(place, 1);
     productTypes.splice(1, 0, value);
   }
+}
+function dropTXTFile(e){
+  e.preventDefault();
+  var all =e.target;
+  var before = all.innerHTML;
+
+    if (all.hasAttribute("data-edit")){
+      e.preventDefault();
+      var dt = e.dataTransfer;
+      var files = dt.files;
+      var reader = new FileReader();
+      reader.onload = function(e){
+
+        var text = reader.result;
+        console.log(text);
+        all.innerHTML = text;
+        if (before === all.innerHTML){
+
+        } else{
+          setTimeout(sendChanges, 10000, all);
+        }
+
+      };
+      reader.readAsText(files[0]);
+    }
+
+
 }
 
 function dropFile(e){
@@ -1047,7 +1188,10 @@ function setPage() {
 }
 
 function pageLoad() {
-  document.addEventListener("keypress", sendDBChanges);
+  document.addEventListener("keypress", function(){
+    sendDBChanges(event);
+    }
+    );
   ajaxGet('api/navigation/homeSidebar.php', function(data) {
     grabElement(data, 'sidebar');
     document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
@@ -1077,6 +1221,11 @@ function pageLoad() {
     getProducts(data);
 
   });
+  getJSON("api/database/getColourScheme.php", function(data) {
+    getScheme(data);
+
+  });
+
   getJSON("api/database/selectProductType.php", function(data) {
     getProductTypes(data);
   });
@@ -1215,7 +1364,45 @@ function getProductTypes(response) {
   }
   console.log(productTypes);
 }
+function getScheme(response){
+      var scheme = response[0];
+      pageColour = scheme[0];
+      textColour = scheme[1];
+      navColour = scheme[2];
+      headingColour = scheme[3];
 
+      ajaxGet('api/navigation/homeSidebar.php', function(data) {
+        grabElement(data, 'sidebar');
+        /*Sidebar*/
+        document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
+          /*Content*/
+          ajaxGet('api/database/contactUs.html', function(data) {
+            grabElement(data, 'mainContent');
+          });
+        });
+        document.getElementById("description").addEventListener("click", function(data) {
+          ajaxGet('api/database/description.html', function(data) {
+            grabElement(data, 'mainContent');
+            if (siteDescription === undefined) {
+              document.getElementById("siteDescription").innerHTML = "A description has not been set.";
+            } else {
+              document.getElementById("siteDescription").innerHTML = siteDescription;
+            }
+            console.log(siteDescription);
+          });
+        });
+        document.getElementById("changeCSS").addEventListener("click", function(data) {
+          ajaxGet('api/navigation/changeColour.php', function(data) {
+            grabElement(data, 'mainContent');
+          });
+
+        });
+        ajaxGet('api/database/contactUs.html', function(data) {
+          grabElement(data, 'mainContent');
+        });
+      });
+    console.log("scheme");
+}
 function getProducts(response) {
   for (var i = 0; i < response.length; i++) {
     var product = response[i];
@@ -1395,6 +1582,11 @@ function setProductPage(productCode, productName, desc, price, quantity, i, item
   document.getElementById("productPageDesc").innerHTML = desc;
   document.getElementById("productPagePrice").innerHTML = price;
   document.getElementById("productPageQuantity").innerHTML = quantity;
+  if (imageState === false){
+    var page = document.getElementById("productPage");
+    var image = document.getElementById("productImage");
+    page.removeChild(image);
+  }else if (imageState === true){
   var path;
   var stringExample = typeof "sdaasd";
   var standardPath = typeof imageLocation;
@@ -1409,6 +1601,7 @@ function setProductPage(productCode, productName, desc, price, quantity, i, item
 
 
   document.getElementById("productImage").setAttribute("src", path);
+ }
   createProductButton(item, i);
   getButtons();
 
@@ -1431,7 +1624,9 @@ function createProductButton(item, i) {
   };
   celButton.setAttribute("data-detail", JSON.stringify(productObj));
   var details = celButton.getAttribute("data-detail");
-  document.getElementById("productImage").setAttribute("data-detail", details);
+  if (imageState === true){
+    document.getElementById("productImage").setAttribute("data-detail", details);
+  }
   document.getElementById("productButton").appendChild(celButton);
 }
 
@@ -1595,3 +1790,4 @@ window.onload = function() {
   console.log(productArray);
 
 };
+//Matthew Champion
