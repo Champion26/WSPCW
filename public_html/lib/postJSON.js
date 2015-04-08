@@ -6,7 +6,7 @@ function postJSON(variable, URL, callback) {
 
   ajaxObj.addEventListener("load",
   function() {
-    
+    callback(ajaxObj.responseText);
   }
 );
   ajaxObj.send(variable);

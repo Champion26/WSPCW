@@ -1,0 +1,352 @@
+section {
+
+        border-color: black;
+}
+section#productLineup{
+  width:200px;
+}
+p {
+	font-family: arial;
+	font-size: 90%;
+        line-height: 150%;
+
+}
+tr:hover{
+  background-color: black;
+  color: white;
+}
+canvas{
+  width:200px;
+  height: 100px;
+  border: 1px solid;
+}
+
+[data-edit]:hover {
+  border:5px solid !important;
+  border-color: red !important;
+}
+
+#topBlock{
+  overflow:hidden;
+  width:100%;
+}
+#searchSection{
+  float:left;
+  width:20%;
+}
+#title{
+  float:left;
+  width:80%;
+}
+
+
+#searchPage{
+  overflow:hidden;
+  width:100%;
+}
+#codeSection{
+  float:left;
+  width:20%;
+}
+#nameSection{
+  float:left;
+  width:80%;
+}
+table, th, td{
+  border: 1px solid green;
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+}
+
+th{
+  height:50px;
+  text-align: left;
+  background-color: green;
+  color:white;
+}
+
+td{
+  height:50px;
+  vertical-align:bottom;
+  padding:15px;
+}
+
+.productTable{
+  padding-top: 25px;
+}
+
+.productTable th{
+  border:1px solid;
+
+}
+
+.productTable tr{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.productTable td, th{
+  padding-right: 15px;
+  padding-left: 15px;
+  border-left: 1px solid;
+  border-right: 1px solid;
+}
+.searchBar{
+  width: 70px;
+}
+li{
+list-style-type: none;
+}
+
+p2{
+     font-family: arial;
+	font-size: 90%;
+        text-align: center;
+}
+strong {
+    font-family: arial;
+}
+
+.headerLogo img{
+     float:left;
+
+
+}
+
+header{
+	padding-bottom: 10px;
+  border-bottom: 2px solid;
+  width:100%;
+
+}
+
+body
+{
+  margin-left: 6%;
+  margin-right:6%;
+  margin-top: 3%;
+}
+
+h1{
+   font-family: calibri;
+   font-size: 280%;
+   text-align:center;
+   float:none;
+   margin-bottom:20px;
+
+	}
+
+h3{
+   font-family: calibri;
+   text-align:center;
+   margin-bottom:20px;
+}
+
+
+h4{
+   font-family: calibri;
+	font-size: 110%;
+   color: black;
+	}
+
+
+
+
+section {
+ float:left;
+ padding: 10px 10px 0px 5px;
+
+
+}
+
+
+
+#content{
+    width: auto;
+    height: auto;
+    padding-top: 5px;
+		padding-bottom: 15px;
+		display: inline-block;
+
+}
+
+#content div, nav{
+	-webkit-flex: 1;  /* Safari 6.1+ */
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	 flex: 1;
+}
+
+#sidebar{
+  width: 230px;
+  height: 100%;
+  float: left;
+  padding-top: 0px;
+  position: fixed !important;
+
+}
+
+
+#mainContent{
+  margin-left: 250px;
+  height: auto;
+
+
+}
+
+#rightNav{
+	  margin-left: 71%;
+		width: 20%;
+    margin-right: 9%;
+		height: auto;
+		float: left;
+		padding-top: 35px;
+		position: fixed;
+}
+
+#header div{
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	flex: 1;
+}
+
+#header nav{
+	-ms-flex: 1;  /* IE 10 */
+	-moz-flex: 1;
+	flex: 1;
+}
+
+
+#topnav{
+	float: none;
+	/*padding-top: 30px;*/
+	text-align: center;
+}
+
+#topnav a{
+	width:130px;
+	display:inline-block;
+
+}
+#topnav li{
+	float: left;
+	display:inline;
+
+}
+
+
+
+
+nav a:link, a:visited {
+
+    display:block;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: green;
+    text-align: center;
+    padding: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+		border: 1px solid;
+		border-color: black;
+		border-radius: 25px;
+}
+
+
+nav a:hover{
+    background-color: white;
+    color: black;
+		border: 1px solid;
+		border-color: black;
+		border-radius: 25px;
+}
+
+nav ul {
+	text-align: center;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	display: inline-block;
+	list-style-type: none;
+
+}
+
+nav li {
+
+	border: 2px solid;
+	border-color: white;
+}
+
+#sidebar li{
+	display: block;
+	padding: 0px 0px 0px 0px;
+
+}
+
+#sidebar a:link, a:visited {
+    width: 200px;
+}
+
+#rightNav li{
+	display: block;
+	padding: 0px 0px 0px 0px;
+
+}
+
+#rightNav a:link, a:visited {
+	width: 200px;
+}
+
+
+footer
+{
+    padding-top: 25px;
+    border-top:5px solid;
+    text-align:center;
+		clear: both;
+}
+
+img#basketImage{
+  width:200px;
+  height:200px;
+}
+
+#footerLinks li{
+  display: inline;
+ }
+#footerLinks a{
+	color:black;
+}
+img {
+  width:200px;
+  height:200px;
+}
+section#basketSection{
+  width:200px;
+  height:200px;
+  border:1px solid;
+}
+
+#basket a, img{
+
+  float:right;
+}
+
+form {
+  border: 2px solid;
+  border-color: green;
+
+}
+fieldset{
+  padding: 25px 25px 25px 25px;
+  border:1px solid;
+  border-color:white;
+}
+input{
+  width:auto;
+  height:auto;
+}

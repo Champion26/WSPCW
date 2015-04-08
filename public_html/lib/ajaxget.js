@@ -1,4 +1,5 @@
 function ajaxGet(URL, callback) {
+  ifSend();
   searchArray = [];
   var ajaxObj = new XMLHttpRequest();
   ajaxObj.open("GET", URL, true); // The TRUE implies asynchronous
@@ -8,6 +9,7 @@ function ajaxGet(URL, callback) {
         callback(ajaxObj.responseText);
         findEditableElements();
         setColour(pageColour, textColour, navColour, headingColour);
+
   }
 }
   };
