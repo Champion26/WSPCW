@@ -11,8 +11,10 @@
   Standard Text Colour: <input type="text" id="standardText"><br><br>
   Standard Nav Text Colour: <input type="text" id="navText"><br><br>
   Heading Text Colour: <input type="text" id="headingText"><br><br>
-  Images (Enable or Disable): <input type="checkbox" id="imageState"name="imageState" value="true">
-
+  Images (Enable or Disable): <input type="checkbox" id="imageState"name="imageState" value="true"><br><br>
+  Image Size (percent of the screen size): <input type="number" id="imageSize" name="imageSize" value="5"><br><br>
+  Navigation Link Height: <input type="number" id="navHeight" value="7"><br><br>
+  Navigation Link Width: <input type="number" id="navWidth" value="15"><br><br>
   <input type="button" value="Submit Changes" onclick="submitSiteEdits()">
 </fieldset>
 </form>

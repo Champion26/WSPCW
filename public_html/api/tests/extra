@@ -1,0 +1,12 @@
+$filename = 'stockReport'.$date.'.txt';
+echo $filename."\n";
+
+$report = fopen($filename);
+
+$pageTitle = "Title: ".$title."\n";
+$pageAuthor = "Author: ".$author."\n";
+$pageDate = "Date: ".$date."\n";
+fwrite($report, $pageTitle);
+fwrite($report, $pageAuthor);
+fwrite($report, $pageDate);
+echo "done";

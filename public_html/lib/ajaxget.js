@@ -8,7 +8,7 @@ function ajaxGet(URL, callback) {
       if (ajaxObj.readyState === 4){
         callback(ajaxObj.responseText);
         findEditableElements();
-        setColour(pageColour, textColour, navColour, headingColour);
+        setColour(pageColour, textColour, navColour, headingColour, imageSize, navHeight, navWidth);
 
   }
 }

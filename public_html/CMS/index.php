@@ -4,7 +4,7 @@ include '../api/database/addData.php';
 <div id="head"></div>
 <header>
       <h1 id='pageTitle' data-edit="">Company Name</h1>
-      <h1 >Content Management System</h1>
+      <h1 >Content Management System and Admin</h1>
 
         <form id="searchBar" >
           <fieldset>

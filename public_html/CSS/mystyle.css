@@ -15,6 +15,22 @@ tr:hover{
   background-color: black;
   color: white;
 }
+section.productArea{
+  border: 1px solid;
+  display: inline-block;
+  width: 45vw;
+
+}
+#orderSection{
+  width: 60vw;
+
+}
+section.orderSection{
+  border: 3px solid;
+  display: inline-block;
+  width: 50vw;
+  margin:1em;
+}
 canvas{
   width:200px;
   height: 100px;

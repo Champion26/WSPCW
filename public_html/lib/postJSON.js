@@ -5,10 +5,11 @@ function postJSON(variable, URL, callback) {
   ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
   ajaxObj.addEventListener("load",
-  function() {
-    callback(ajaxObj.responseText);
-  }
-);
+    function() {
+        console.log("received");
+        callback(ajaxObj.responseText);
+    }
+  );
   ajaxObj.send(variable);
 }
 

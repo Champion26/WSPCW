@@ -20,6 +20,9 @@ var navColour = "white";
 var headingColour = "black";
 var imageState = true;
 var changedProducts = [];
+var imageSize = 5;
+var navHeight = 1;
+var navWidth = 12;
 
 function addToBasket(e) {
   var details = JSON.parse(e.currentTarget.dataset.detail);
@@ -111,8 +114,7 @@ function setSearch() {
 }
 
 function setProductSidebar() {
-  setOrder();
-  //NEED retrieve order
+
   var target = document.getElementById("productSidebar");
   var list = document.createElement("ul");
   for (var i = 0; i < productTypes.length; i++) {
@@ -223,31 +225,14 @@ function submitChanges(e) {
 function makeEditable(id) {
   var change = document.getElementById(id);
   change.addEventListener("click", function() {
-    change.setAttribute("contenteditable", "false");
+    change.setAttribute("contenteditable", "true");
     change.setAttribute("ondrop", "dropTXTFile(event)");
   });
 }
 
-function setOrder(){
-   for (var i = 0; i < productTypes.length; i++){
-     var type = productType[i];
-     var location = productTypes.indexOf(productType[i]);
-     var details = "type="+type+"&location="+location;
-     postJSON(
-       details,
-       '../api/database/setSidebar.php',
-       function(data) {
-
-       }
-     );
-   }
-}
-
-
-
 function applyEdits(element) {
   element.addEventListener("click", function() {
-    element.setAttribute("contenteditable", "false");
+    element.setAttribute("contenteditable", "true");
     element.setAttribute("ondrop", "dropTXTFile(event)");
 
 
@@ -364,7 +349,7 @@ function editable() {
 
   for (var i = 0; i < classname.length; i++) {
     classname[i].addEventListener('click', function() {
-      classname[i].setAttribute("contenteditable", "false");
+      classname[i].setAttribute("contenteditable", "true");
 
     });
   }
@@ -721,6 +706,158 @@ function addProductType(e) {
   document.getElementById("productType").value = "";
 }
 
+function generateReport() {
+
+  var form = document.getElementById('generateFile');
+
+  var uploadButton = document.getElementById('createReport');
+  var removeButton = document.getElementById('removeTableButton');
+  removeButton.onclick = function(event){
+    console.log("removing");
+    document.getElementById("reportTable").innerHTML = "";
+  };
+  uploadButton.onclick = function(event) {
+    event.preventDefault();
+    document.getElementById("reportTable").innerHTML = "";
+    // Update button text.
+    uploadButton.innerHTML = 'Uploading...';
+    var title = document.getElementById("reportTitle").value;
+    var author = document.getElementById("reportAuthor").value;
+    var date = new Date();
+    var type = document.getElementById("productType").value;
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; //January is 0!
+    var yyyy = date.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+
+    date = mm+''+dd+''+yyyy;
+    var stockData= [];
+    console.log(typeof type);
+
+    if (type === ""){
+      getJSON("../api/database/getStockInfo.php", function(data) {
+        for(var i = 0; i < data.length; i++){
+            var object = data[i];
+            stockData.push(object);
+        }
+        printTable(title, author, date, stockData);
+      });
+    }else{
+      var typeDetails = "type="+type;
+
+      returnJSON(typeDetails, "../api/database/getStockInfoType.php", function(data) {
+        for(var i = 0; i < data.length; i++){
+            var object = data[i];
+            console.log(object);
+            stockData.push(object);
+        }
+        console.log(stockData);
+        printTable(title, author, date, stockData);
+      });
+    }
+
+  }
+};
+
+
+function printTable(title, author, date, stockData){
+  reportDetails = "title="+title+"&author="+author+"&date="+date;
+  console.log(stockData);
+  postJSON(
+    reportDetails,
+    '../api/database/setFile.php',
+    function(data) {
+
+    }
+  );
+  console.log(stockData.length);
+
+  generateReportTable(stockData);
+  for (var x = 0; x < stockData.length; x++){
+    var product = stockData[x];
+    var code = product[0];
+    var name = product[1];
+    var quantity = product[2];
+
+    var productDetails = "code="+code+"&name="+name+"&quantity="+quantity+"&date="+date;
+    postJSON(
+      productDetails,
+      '../api/database/addProductsToReport.php',
+      function(data) {
+
+      }
+    );
+  }
+}
+
+function generateReportTable(stockData) {
+  // get the reference for the body
+    var target = document.getElementById("reportTable");
+
+    // creates a <table> element and a <tbody> element
+
+    var tblBody = document.createElement("tbody");
+    var tableTitles = document.createElement("tr");
+    for (var x = 0; x <= 2; x++) {
+      if (x === 0) {
+        titleContent = "Product Code";
+      } else if (x === 1) {
+        titleContent = "Product Name";
+      } else if (x === 2) {
+        titleContent = "Quantity";
+      }
+      var titleCell = document.createElement("th");
+      var titleText = document.createTextNode(titleContent);
+      titleCell.appendChild(titleText);
+      tableTitles.appendChild(titleCell);
+    }
+    tblBody.appendChild(tableTitles);
+
+
+
+    // creating all cells
+    for (var i = 0; i < stockData.length; i++) {
+      // creates a table row
+      var row = document.createElement("tr");
+      var basketObject = stockData[i];
+      console.log(basketObject);
+      for (var j = 0; j <= 2; j++) {
+        // Create a <td> element and a text node, make the text
+        // node the contents of the <td>, and put the <td> at
+        // the end of the table row
+        if (j === 0) {
+          cellContent = basketObject[0];
+        } else if (j === 1) {
+          cellContent = basketObject[1];
+        } else if (j === 2) {
+          cellContent = basketObject[2];
+        }
+        var cell = document.createElement("td");
+        var cellText = document.createTextNode(cellContent);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
+      }
+
+      // add the row to the end of the table body
+      tblBody.appendChild(row);
+
+    }
+
+
+    // put the <tbody> in the <table>
+
+    // appends <table> into <body>
+    target.appendChild(tblBody);
+  }
+
+
 
 function sendImage() {
 
@@ -879,6 +1016,7 @@ function setAdminFieldContent() {
   document.getElementById("standardText").value = textColour;
   document.getElementById("navText").value = navColour;
   document.getElementById("headingText").value = headingColour;
+  document.getElementById("imageSize").value = imageSize;
   console.log(imageState);
   var radio = document.getElementById("imageState");
   if (imageState === true){
@@ -899,12 +1037,12 @@ function setAdminAfterColourChange(){
         ajaxGet('../api/structure/footer.php', function(data) {
           grabElement(data, 'footerLinks');
         });
-        ajaxGet('../api/structure/topNav.php', function(data) {
+        ajaxGet('../api/structure/topNavCMS.php', function(data) {
           grabElement(data, 'topNav');
           setHome();
           setProducts();
           setBasket();
-          setAdmin();
+          setCMS();
           setSearch();
         });
 
@@ -917,6 +1055,9 @@ function submitSiteEdits() {
   var navText = document.getElementById("navText").value;
   var headingText = document.getElementById("headingText").value;
   var state = document.getElementById("imageState");
+  var imgSize = document.getElementById("imageSize").value;
+  var navH= document.getElementById("navHeight").value;
+  var navW = document.getElementById("navWidth").value;
   console.log(state.checked);
   if (state.checked){
     imageState = true;
@@ -926,7 +1067,7 @@ function submitSiteEdits() {
   document.getElementById("title").innerHTML = tabTitle;
   console.log(availableColours.indexOf(siteColour));
   if (availableColours.indexOf(siteColour) === -1){
-    alert("One of there colours is not correct.");
+    alert("One of the colours is not correct.");
     var colourList;
     for (var i = 0; i < availableColours.length; i++){
         colourList += ", "+availableColours[i];
@@ -937,7 +1078,10 @@ function submitSiteEdits() {
     textColour = standardText;
     navColour = navText;
     headingColour = headingText;
-    colourDetails = "pageColour="+pageColour+"&textColour="+textColour+"&navColour="+navColour+"&headingColour="+headingColour;
+    imageSize = imgSize;
+
+    console.log("the image size is", imageSize);
+    colourDetails = "pageColour="+pageColour+"&textColour="+textColour+"&navColour="+navColour+"&headingColour="+headingColour+"&imageSize="+imageSize+"&navHeight="+navHeight+"&navWidth="+navWidth;
     postJSON(
       colourDetails,
       '../api/database/updateColourScheme.php',
@@ -949,12 +1093,16 @@ function submitSiteEdits() {
     console.log(pageColour, textColour, navColour);
   }
 }
-function setColour(colour, textColour, navColour, headingColour){
+function setColour(colour, textColour, navColour, headingColour, imageSize, navHeight, navWidth){
   var tables = document.querySelectorAll("table", "td", "th");
   var th = document.getElementsByTagName("th");
   var nav = document.getElementsByTagName("a");
   var form = document.getElementsByTagName("form");
+  var image = document.getElementsByTagName("img");
+  var aLinks = document.getElementsByTagName("a");
 
+  setHeightWidth(aLinks, navHeight, navWidth);
+  setImageSize(image, imageSize);
   tagArray(tables, colour, "borderColor");
   tagArray(th, colour, "borderColor");
   tagArray(form, colour, "borderColor");
@@ -966,6 +1114,23 @@ function setColour(colour, textColour, navColour, headingColour){
   tagArray(headings, headingColour, "color");
   tagArray(nav, navColour, "color");
 
+}
+function setHeightWidth(array, height, width){
+    for (var i = 0; i < array.length; i++){
+        var element = array[i];
+        var h = height+"vw";
+        var w = width+"vw";
+        element.style.height = h;
+        element.style.width = w;
+    }
+}
+function setImageSize(array, imageSize){
+    for (var i = 0; i < array.length; i++){
+        var element = array[i];
+        var size = imageSize+"vw";
+        element.style.height = size;
+        element.style.width = size;
+    }
 }
 
 function tagArray(array, colour, option){
@@ -1125,20 +1290,185 @@ function drop(ev) {
   var node = ev.target;
   console.log(parentNode, object, node);
   insertAfter(parentNode, object, node, children);
-  setOrder();
+
   //change array position
 }
 
-function setAdmin() {
-  document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
+function getQuantity(){
+  var getOldButton = document.getElementById("getQuantity");
+  var updateButton = document.getElementById("updateQuantity");
+  getOldButton.onclick = function(){
+    console.log("button clicked");
+    var code = document.getElementById("productCode").value;
+    var productInfo = "code="+code;
+    var results = [];
+    returnJSON(
+        productInfo,
+        '../api/database/getQuantities.php',
+        function(data) {
+          console.log(data.length);
+          for (var i = 0; i < data.length; i++){
+            var product = data[i];
+            results.push(product);
+          }
+          console.log(results);
+          document.getElementById("oldQuantity").value = results[0][1];
+
+        }
+    );
+  }
+  updateButton.onclick = function(){
+    var oldQuantity = Number(document.getElementById("oldQuantity").value);
+    var increaseBy = Number(document.getElementById("increaseQuantity").value);
+    var newValue = oldQuantity + increaseBy;
+    var code = document.getElementById("productCode").value;
+    var newDetails = "code="+code+"&newValue="+newValue;
+
+      postJSON(
+        newDetails,
+        '../api/database/updateQuantity.php',
+        function(data) {
+
+        }
+      );
+
+  }
+
+}
+
+function setAdmin(){
+  document.getElementById("adminPage").addEventListener("click", function(data) { /*offer sidebar & page */
 
     ajaxGet('../api/navigation/adminSidebar.php', function(data) {
+      grabElement(data, 'sidebar');
+
+      document.getElementById("stock").addEventListener("click", function(data) {
+        ajaxGet('../api/database/stock.html', function(data) {
+          grabElement(data, 'mainContent');
+          getTypes();
+          generateReport();
+        });
+      });
+      document.getElementById("orders").addEventListener("click", function(data) {
+        ajaxGet('../api/database/addProductType.php', function(data) {
+          grabElement(data, 'mainContent');
+
+
+        });
+      });
+    });
+    ajaxGet('../api/database/stock.html', function(data) {
+      grabElement(data, 'mainContent');
+      getTypes();
+      generateReport();
+    });
+  }, false);
+}
+
+function deletePage(){
+  var checkButton = document.getElementById("deleteButton");
+
+  var deleteOption = false;
+  checkButton.onclick= function(){
+    var code = document.getElementById("productCode").value;
+    var codeDetails= "code="+code;
+    for (var i = 0; i < productArray.length; i++){
+      var product = productArray[i];
+      console.log(product[0], code);
+      if (product[0] === code){
+        deleteOption = true;
+        break;
+      }
+    }
+    if (deleteOption === true){
+          alert("This product exists. You can either press the delete button below or drag the image onto the bin.");
+        deleteOption = true;
+        createDeleteImages(code);
+      }else{
+        alert("This product does not exists. Please enter a correct code.");
+    }
+  }
+
+
+}
+function createDeleteImages(code){
+  console.log("working");
+  var target = document.getElementById("imageArea");
+  var section = document.createElement("section");
+  section.setAttribute("id", "codeImage");
+    var canvas = document.createElement("img");
+    canvas.setAttribute("id", code);
+    canvas.setAttribute("src", "../images/product.jpg")
+    canvas.setAttribute("ondrop", "dropDeleteImage(event)");
+    canvas.setAttribute("ondragstart", "drag(event)");
+//    canvas.setAttribute("data-product", "true");
+    canvas.setAttribute("ondragover", "allowDrop(event)");
+    canvas.setAttribute("draggable", "true");
+
+    section.appendChild(canvas);
+  target.appendChild(section);
+  createBin();
+
+}
+
+function createBin(){
+  var target = document.getElementById("binArea");
+  var section = document.createElement("section");
+  section.setAttribute("id", "binImage");
+    var canvas = document.createElement("img");
+    canvas.setAttribute("id", "bin");
+    canvas.setAttribute("src", "../images/recycling-bin.jpg");
+    canvas.setAttribute("data-product", "true");
+    canvas.setAttribute("ondrop", "dropDeleteImage(event)");
+    canvas.setAttribute("ondragstart", "drag(event)");
+    canvas.setAttribute("data-product", "true");
+    canvas.setAttribute("ondragover", "allowDrop(event)");
+    canvas.setAttribute("draggable", "false");
+
+    section.appendChild(canvas);
+  target.appendChild(section);
+}
+function dropDeleteImage(ev){
+
+
+    ev.preventDefault();
+    var target = ev.target;
+    if (target.hasAttribute("data-product")){
+        var code = document.getElementById("productCode").value;
+        productDetails = "code="+code;
+          postJSON(
+            productDetails,
+            '../api/database/deleteProduct.php',
+            function(data) {
+
+            }
+          );
+    }
+}
+
+
+function setCMS() {
+  document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
+
+    ajaxGet('../api/navigation/cmsSidebar.php', function(data) {
       grabElement(data, 'sidebar');
       document.getElementById("addProduct").addEventListener("click", function(data) {
         ajaxGet('../api/database/addJSON.html', function(data) {
           grabElement(data, 'mainContent');
           getTypes();
           sendImage();
+        });
+      });
+      document.getElementById("stocklevels").addEventListener("click", function(data) {
+        ajaxGet('../api/database/stockLevels.html', function(data) {
+          grabElement(data, 'mainContent');
+          getQuantity();
+        });
+      });
+      document.getElementById("remove").addEventListener("click", function(data) {
+        ajaxGet('../api/database/removeProduct.html', function(data) {
+          grabElement(data, 'mainContent');
+          deletePage();
         });
       });
       document.getElementById("addType").addEventListener("click", function(data) {
@@ -1194,14 +1524,18 @@ function setBasket() {
 
 function setPage() {
   setPageStructure();
-  ajaxGet('../api/structure/topNav.php', function(data) {
+  ajaxGet('../api/structure/topNavCMS.php', function(data) {
     grabElement(data, 'topNav');
     setHome();
     setProducts();
     setBasket();
     setSearch();
+    setCMS();
+    setAdmin();
 
   });
+
+
 }
 
 function pageLoad() {
@@ -1388,6 +1722,10 @@ function getScheme(response){
       textColour = scheme[1];
       navColour = scheme[2];
       headingColour = scheme[3];
+      console.log(imageSize);
+      imageSize = scheme[4];
+      navHeight = scheme[5];
+      navWidth = scheme[6];
 
       ajaxGet('../api/navigation/homeSidebar.php', function(data) {
         grabElement(data, 'sidebar');
