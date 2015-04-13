@@ -10,7 +10,7 @@
 </fieldset>
 </form>
 
-<p id="searchExplanation" data-edit="">The results will appear below</p>
+<p id="searchExplanation" data-edit="">The results will appear below. Once changes have been made they can only be manually changed.</p>
 <form id="viewProduct">
   <fieldset>
   <input type="hidden"  name="pCode" id="pCode" value=""><br>
@@ -25,6 +25,8 @@
   Price (£):  <input type="number" step="any" name="price" id="price" value="" > <br>
   <br>
   Quantity:  <input type="number"  name="quantity" id="quantity" value="" ><br><br>
+  <p data-edit="">In order to change the image associated with the product you will have to enter a <strong>valid file name</strong> of a file that is located in the image
+    folder. <strong>If this name or file type is incorrect the image will have the 'No Image Available' image associated with it.</strong></p>
   Image Name: <input type="string" name="imageName" id="imageName" value=""<br><br>
 
   <input type="button" name='submitEdit' value="Submit" onclick="submitChanges(event)">

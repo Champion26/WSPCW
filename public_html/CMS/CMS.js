@@ -196,7 +196,7 @@ function getOrderDetails(){
     fieldset.appendChild(confirm);
     form.appendChild(fieldset);
     target.appendChild(form);
-  }
+  };
 }
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -253,11 +253,11 @@ function sendOrder(totalPrice, productIDs, orderNumber){
   var yyyy = date.getFullYear();
 
   if(dd<10) {
-      dd='0'+dd
+      dd='0'+dd;
   }
 
   if(mm<10) {
-      mm='0'+mm
+      mm='0'+mm;
   }
 
   date = mm+''+dd+''+yyyy;
@@ -590,10 +590,25 @@ function getSearchResult(response) {
 }
 
 function getSearchBy(response) {
+  console.log(response);
   for (var i = 0; i < response.length; i++) {
     var product = response[i];
-    searchArray.push(product);
-    console.log("added");
+    var found = false;
+    if (searchArray.length === 0){
+      searchArray.push(product);
+    }else{
+      for (var x = 0; x<searchArray.length;x++){
+        var check = searchArray[x];
+        if(product[1]===check[1]){
+           found=true;
+           break;
+        }
+      }
+      if (found === false){
+        searchArray.push(product);
+      }
+   }
+
   }
   console.log(searchArray);
 }
@@ -755,6 +770,7 @@ function printSearch() {
     tblBody.appendChild(tableTitles);
 
     // creating all cells
+    console.log(searchArray);
     for (var i = 0; i < searchArray.length; i++) {
       // creates a table row
       var row = document.createElement("tr");
@@ -866,11 +882,11 @@ function generateReport() {
     var yyyy = date.getFullYear();
 
     if(dd<10) {
-        dd='0'+dd
+        dd='0'+dd;
     }
 
     if(mm<10) {
-        mm='0'+mm
+        mm='0'+mm;
     }
 
     date = mm+''+dd+''+yyyy;
@@ -1456,7 +1472,7 @@ function getQuantity(){
 
         }
     );
-  }
+  };
   updateButton.onclick = function(){
     var oldQuantity = Number(document.getElementById("oldQuantity").value);
     var increaseBy = Number(document.getElementById("increaseQuantity").value);
@@ -1527,7 +1543,7 @@ function deletePage(){
       }else{
         alert("This product does not exists. Please enter a correct code.");
     }
-  }
+  };
 
 
 }
@@ -1665,8 +1681,17 @@ function buildOrderTable(data){
                 tbl.appendChild(orderLabel);
                 //NEED to set details such as address
                 var orderNo = document.createElement("p");
-                orderNo.innerHTML = "Order Number: "+order.orderName;
+                orderNo.innerHTML = "Order Number: "+order.orderNumber;
                 tbl.appendChild(orderNo);
+                var rName = document.createElement("p");
+                rName.innerHTML = "Recipient Name: "+order.recipient;
+                tbl.appendChild(rName);
+                var rAddress= document.createElement("p");
+                rAddress.innerHTML= "Recipient Address: "+order.address;
+                tbl.appendChild(rAddress);
+                var rPostcode = document.createElement("p");
+                rPostcode. innerHTML = "Recipient Postcode: "+order.postcode;
+                tbl.appendChild(rPostcode);
                 var productLabel = document.createElement("strong");
                 productLabel.innerHTML = "Products:";
                 tbl.appendChild(productLabel);
@@ -2152,4 +2177,451 @@ function printProducts(type) {
         var name = "addButton" + i;
         buttonList.push(name);
         celButton.setAttribute("id", name);
-        var
+        var productObj = {
+          productCode: item[0],
+          productName: item[1],
+          productType: item[3],
+          description: item[2],
+          price: item[4],
+          quantity: item[5]
+        };
+        celButton.setAttribute("data-detail", JSON.stringify(productObj));
+
+        productButton.push(productObj);
+
+        cell.appendChild(celButton);
+
+      }
+
+      row.appendChild(cell);
+
+    }
+
+    // add the row to the end of the table body
+    tblBody.appendChild(row);
+
+  }
+  // put the <tbody> in the <table>
+  tbl.appendChild(tblBody);
+  // appends <table> into <body>
+  target.appendChild(tbl);
+
+}
+
+function moveVariables(children) {
+  console.log(children.length);
+  for (var i = 0; i < (children.length - 1); i++) {
+    var child = children[i].getAttribute("id");
+    console.log(child);
+
+    for (var x = 0; x < productTypes.length; x++) {
+      var id = productTypes[x];
+
+      if (id === child) {
+        var location = productTypes.indexOf(id);
+        productTypes.splice(location, 1);
+        productTypes.splice(i, 0, id);
+        //  console.log(productTypes[i], productTypes.indexOf(productTypes[i]));
+      }
+    }
+  }
+}
+
+function insertAfter(parentNode, newNode, target, children) {
+  parentNode.insertBefore(newNode, target);
+  moveVariables(children);
+}
+
+function dropImage(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  var object = document.getElementById(data);
+  var target = ev.target.getAttribute("id");
+  if (target === "basketImage") {
+    var imageDetails = document.getElementById("productImage").getAttribute("data-detail");
+    fireBasketEvent(
+      JSON.parse(imageDetails),
+      1
+    );
+  }
+
+}
+
+function setTDEventListener(cell, item, i) {
+  cell.addEventListener("click", function() {
+    createProductPage(item[0], item[1], item[2], item[4], item[5], i, item, item[6]);
+  });
+}
+function getProductDetails(){
+  console.log("getting changes");
+  var code= document.getElementById("productPageCode").innerHTML;
+  var name= document.getElementById("productPageName").innerHTML;
+  var desc= document.getElementById("productPageDesc").innerHTML;
+  var price=document.getElementById("productPagePrice").innerHTML;
+  var quantity=document.getElementById("productPageQuantity").innerHTML;
+  var found = false;
+  for (var x = 0; x <changedProducts.length; x++){
+    var item = changedProducts[x];
+    if (item[0] === code){
+      item[1] = name;
+      item[2] = desc;
+      item[3] = price;
+      item[4] = quantity;
+      found =true;
+    }
+  }
+  if (found === false){
+      changedProducts.push({
+        productCode: code,
+        productName: name,
+        description: desc,
+        price: price,
+        quantity: quantity
+      });
+
+  }
+}
+function getProductChanges(){
+  console.log("running changes");
+  var all = document.getElementsByTagName("*");
+  for (var i = 0; i < all.length; i++){
+    var element = all[i];
+    if (element.hasAttribute("data-edit")){
+      console.log("has");
+      element.addEventListener("click", function(){
+        console.log("click");
+        document.addEventListener("keypress", function(){
+          console.log("press");
+          setTimeout(getProductDetails, 3000);
+        });
+        });
+        element.addEventListener("mouseover", function(){
+          element.addEventListener("keypress", function(){
+            setTimeout(getProductDetails, 3000);
+          });
+        });
+      }
+    }
+  }
+
+function sendProductChanges(){
+  for (var i = 0; i <changedProducts.length; i++){
+    var product = changedProducts[i];
+    var productDetails = "productCode="+product.productCode+"&productName="+product.productName+"&desc="+product.description+"&price="+product.price+"&quantity="+product.quantity;
+
+
+
+  postJSON(
+    productDetails,
+    '../api/database/updateEditedProduct.php',
+    function(data) {
+      console.log("refreshing");
+    }
+  );
+
+}
+setTimeout(whenChangesSet, 1000);
+}
+function whenChangesSet(){
+  changedProducts=[];
+  refreshProducts();
+
+}
+function ifSend(){
+      console.log(document.getElementById("productPage"));
+      if(document.getElementById("productPage")=== null){
+
+      }else{
+        sendProductChanges();
+        console.log("sent");
+
+        console.log(changedProducts);
+
+      }
+}
+function createProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
+  ajaxGet('../api/database/productPage.html', function(data) {
+    console.log("create");
+    grabElement(data, 'mainContent');
+    setProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation);
+    getProductChanges();
+
+  });
+}
+
+function setProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
+  document.getElementById("productPageCode").innerHTML = productCode;
+  document.getElementById("productPageName").innerHTML = productName;
+  document.getElementById("productPageDesc").innerHTML = desc;
+  document.getElementById("productPagePrice").innerHTML = price;
+  document.getElementById("productPageQuantity").innerHTML = quantity;
+  if (imageState === false){
+    var page = document.getElementById("productPage");
+    var image = document.getElementById("productImage");
+    page.removeChild(image);
+  }else if (imageState === true){
+  var path;
+  var stringExample = typeof "sdaasd";
+  var standardPath = typeof imageLocation;
+  console.log(imageLocation.indexOf(".jpg"));
+  if ((imageLocation.indexOf(".jpg") >0) || (imageLocation.indexOf(".png"))>0 ){
+
+    path = "../images/"+imageLocation;
+  } else{
+
+    path = "../images/noProduct.jpg";
+  }
+
+
+  document.getElementById("productImage").setAttribute("src", path);
+ }
+  createProductButton(item, i);
+  getButtons();
+
+}
+
+function createProductButton(item, i) {
+  console.log("asd");
+  var celButton = document.createElement("button");
+  celButton.innerHTML = 'Add to Basket';
+  var name = "addButton" + i;
+  buttonList.push(name);
+  celButton.setAttribute("id", name);
+  var productObj = {
+    productCode: item[0],
+    productName: item[1],
+    productType: item[3],
+    description: item[2],
+    price: item[4],
+    quantity: item[5]
+  };
+  celButton.setAttribute("data-detail", JSON.stringify(productObj));
+  var details = celButton.getAttribute("data-detail");
+  if (imageState === true){
+    document.getElementById("productImage").setAttribute("data-detail", details);
+  }
+  document.getElementById("productButton").appendChild(celButton);
+}
+
+
+function generateTable() {
+  // get the reference for the body
+  var target = document.getElementById("basketTable");
+  var basketLength = myBasket.length;
+  if (myBasket.length === 0) {
+    var emptyTable = document.createElement("p");
+    var emptyMessage = "Your basket is currently empty.";
+    var addMessage = document.createTextNode(emptyMessage);
+    emptyTable.appendChild(addMessage);
+    target.appendChild(emptyTable);
+  } else {
+    // creates a <table> element and a <tbody> element
+    var tbl = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+    var tableTitles = document.createElement("tr");
+    for (var x = 0; x <= 6; x++) {
+      if (x === 0) {
+        titleContent = "Product Code";
+      } else if (x === 1) {
+        titleContent = "Product Name";
+      } else if (x === 2) {
+        titleContent = "Product Type";
+      } else if (x === 3) {
+        titleContent = "Description";
+      } else if (x === 4) {
+        titleContent = "Price";
+      } else if (x === 5) {
+        titleContent = "Quantity";
+      }
+      else if (x === 6) {
+        titleContent = "Remove?";
+      }
+      var titleCell = document.createElement("th");
+      var titleText = document.createTextNode(titleContent);
+      titleCell.appendChild(titleText);
+      tableTitles.appendChild(titleCell);
+    }
+    tblBody.appendChild(tableTitles);
+    var totPrice = 0;
+
+
+    // creating all cells
+    for (var i = 0; i < basketLength; i++) {
+      // creates a table row
+      var row = document.createElement("tr");
+      var basketObject = myBasket[i];
+      var removeButton = document.createElement("button");
+      for (var j = 0; j <= 6; j++) {
+        // Create a <td> element and a text node, make the text
+        // node the contents of the <td>, and put the <td> at
+        // the end of the table row
+        if (j === 0) {
+          cellContent = basketObject["productCode"];
+        } else if (j === 1) {
+          cellContent = basketObject["productName"];
+        } else if (j === 2) {
+          cellContent = basketObject["productType"];
+        } else if (j === 3) {
+          cellContent = basketObject["description"];
+        } else if (j === 4) {
+          cellContent = "\u00A3" + basketObject["price"];
+          var itemPrice = basketObject["price"];
+          totPrice += totPrice + Number(itemPrice);
+          console.log(Number(itemPrice), typeof totPrice, totPrice);
+        } else if (j === 5) {
+          cellContent = basketObject["quantity"];
+
+
+        }
+        else if (j === 6) {
+
+          removeButton.setAttribute("data-code", basketObject["productCode"]);
+          removeButton.setAttribute("onclick", "removeProductBasket(event)");
+          removeButton.innerHTML = "Remove";
+        }
+        if (basketObject === null) {
+          cellContent = "N/A";
+        }
+        var cell = document.createElement("td");
+        if (j===6){
+          cell.appendChild(removeButton);
+        } else{
+          var cellText = document.createTextNode(cellContent);
+          cell.appendChild(cellText);
+        }
+
+        row.appendChild(cell);
+      }
+
+      // add the row to the end of the table body
+      tblBody.appendChild(row);
+
+    }
+
+    var totalPrice = document.createElement("tr");
+    for (var p = 0; p <= 6; p++) {
+      if (p === 0) {
+        priceContent = " ";
+      } else if (p === 1) {
+        priceContent = " ";
+      } else if (p === 2) {
+        priceContent = " ";
+      } else if (p === 3) {
+        priceContent = " ";
+      } else if (p === 4) {
+        priceContent = " ";
+      }else if (p === 5) {
+        priceContent = "Total Price: ";
+      } else if (p === 6) {
+        priceContent = "\u00A3" + totPrice.toString();
+
+      }
+      var priceCell = document.createElement("td");
+      var priceText = document.createTextNode(priceContent);
+      priceCell.appendChild(priceText);
+      totalPrice.appendChild(priceCell);
+    }
+    tblBody.appendChild(totalPrice);
+
+    // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+    // appends <table> into <body>
+    target.appendChild(tbl);
+  }
+
+}
+function removeProductBasket(ev){
+  var button = ev.target;
+  var code = button.getAttribute("data-code");
+  for (var i =0; i<myBasket.length; i++){
+    var product = myBasket[i];
+    if (code === product["productCode"]){
+      var quantity = Number(product["quantity"]);
+      if (quantity === 1){
+      var location = myBasket.indexOf(product);
+      myBasket.splice(location, 1);
+      alert("You have removed one "+product["productName"]+".");
+      localStorage.setItem("myBasket", JSON.stringify(myBasket));
+      ajaxGet('../api/database/getBasketJS.php', function(data) {
+        grabElement(data, 'mainContent');
+        generateTable();
+      });
+    } else{
+      product["quantity"] = quantity - 1;
+      alert("You have removed one "+product["productName"]+".");
+      localStorage.setItem("myBasket", JSON.stringify(myBasket));
+      ajaxGet('../api/database/getBasketJS.php', function(data) {
+        grabElement(data, 'mainContent');
+        generateTable();
+      });
+    }
+    }
+  }
+
+}
+function refreshProducts() {
+  getJSON("../api/database/selectTypeJSON.php", function(data) {
+    getProducts(data);
+  });
+}
+
+function clearBasket() {
+  console.log(myBasket.length);
+  myBasket = [];
+  console.log(myBasket.length);
+  console.log(myBasket);
+  ajaxGet('../api/database/getBasketJS.php', function(data) {
+    grabElement(data, 'mainContent');
+    generateTable();
+  });
+  alert('You have cleared the contents of your basket.');
+  localStorage.clear();
+
+}
+
+function searchEvent() {
+  document.getElementById("productN").addEventListener("change", function(data) {
+    userSearch = [];
+    for (var i = 0; i < productArray.length; i++) {
+      var searchValue = document.getElementById("productN").value;
+      console.log(searchValue, productArray[i][1]);
+      if (productArray[i][1].indexOf(searchValue) >= 0) {
+        userSearch.push(productArray[i]);
+        console.log(userSearch.length);
+      }
+    }
+    console.log(userSearch.length);
+    var options = '';
+
+    for (var x = 0; x < userSearch.length; x++) {
+      options += '<option value="' + userSearch[x][1] + '" />';
+    }
+
+    document.getElementById('names').innerHTML = options;
+  });
+}
+
+function retrieveBasket(){
+  var localBasket = JSON.parse(localStorage.getItem("myBasket"));
+  console.log(typeof localBasket, localBasket);
+  if (localBasket === null){
+
+
+  }else {
+    for (var i = 0; i <localBasket.length; i++){
+      var item = localBasket[i];
+      myBasket.push(item);
+    }
+  }
+
+}
+window.onload = function() {
+
+  setPage();
+  pageLoad();
+  searchEvent();
+  console.log(productArray);
+  retrieveBasket();
+
+};
+//Matthew Champion
