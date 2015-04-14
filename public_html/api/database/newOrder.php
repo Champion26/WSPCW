@@ -19,9 +19,10 @@ $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
      $address = $_POST['address'];
      $postcode = $_POST['postcode'];
      $number = $_POST['orderNumber'];
+     $email = $_POST['email'];
 
-     $q = "INSERT INTO orderTable(orderDate, totalCost, recipient, recipientAddress, postcode, orderNumber)
-     VALUES (:dateOrder, :cost, :name, :address, :postcode, :orderNumber)";
+     $q = "INSERT INTO orderTable(orderDate, totalCost, recipient, recipientAddress, postcode, orderNumber, recipEmail)
+     VALUES (:dateOrder, :cost, :name, :address, :postcode, :orderNumber, :email);";
 
      $query = $dbh->prepare($q);
      $query->bindValue(":dateOrder", $date);
@@ -30,6 +31,7 @@ $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
      $query->bindValue(":address", $address);
      $query->bindValue(":postcode", $postcode);
      $query->bindValue(":orderNumber", $number);
+     $query->bindValue(":email", $email);
      $query -> execute();
 
 

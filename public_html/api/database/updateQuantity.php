@@ -14,6 +14,7 @@ $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
 if(isset($_POST['code'])){
      $code = $_POST['code'];
      $quantity = $_POST['newValue'];
+     
      echo $quantity;
      $q = "UPDATE product
      SET quantity= :quantity

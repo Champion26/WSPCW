@@ -31,9 +31,11 @@ try {
           $address = $row['recipientAddress'];
           $postcode = $row['postcode'];
           $orderN = $row['orderNumber'];
+          $state = $row['shipped'];
+          $email = $row['recipEmail'];
 
 
-          $product = array($date, $cost, $name, $address, $postcode, $orderN);
+          $product = array($date, $cost, $name, $address, $postcode, $orderN, $state, $email);
           $range[] = $product;
 
         endforeach;

@@ -114,27 +114,38 @@ function setSearch() {
 }
 
 function setProductSidebar() {
+  var types=[];
 
-  var target = document.getElementById("productSidebar");
-  var list = document.createElement("ul");
-  for (var i = 0; i < productTypes.length; i++) {
-    var listElement = document.createElement("li");
-    var link = document.createElement("a");
-    link.setAttribute("href", "#");
-    link.setAttribute("id", productTypes[i]);
-    var name = productTypes[i];
-    var label = document.createTextNode(name);
-    link.innerHTML = name;
-    listElement.appendChild(link);
-    list.appendChild(listElement);
-  }
-  target.appendChild(list);
-  applyEventListeners();
+  getJSON(
+    '../api/database/getNewSidebar.php',
+    function(data){
+      for (var x = 0; x <data.length;x++){
+        var pType = data[x];
+        types.push(pType);
+      }
+      var target = document.getElementById("productSidebar");
+      var list = document.createElement("ul");
+      for (var i = 0; i < types.length; i++) {
+        var listElement = document.createElement("li");
+        var link = document.createElement("a");
+        link.setAttribute("href", "#");
+        link.setAttribute("id", types[i]);
+        var name = types[i];
+        var label = document.createTextNode(name);
+        link.innerHTML = name;
+        listElement.appendChild(link);
+        list.appendChild(listElement);
+      }
+      target.appendChild(list);
+      applyEventListeners(types);
+    }
+  )
+
 }
 
-function applyIndividualListener(type, x) {
+function applyIndividualListener(type, x, types) {
 
-  document.getElementById(productTypes[x]).addEventListener("click", function(data) {
+  document.getElementById(types[x]).addEventListener("click", function(data) {
     var productType = [];
     for (var i = 0; i < productArray.length; i++) {
       var product = productArray[i];
@@ -189,6 +200,13 @@ function getOrderDetails(){
     fieldset.appendChild(postcodeLabel);
     fieldset.appendChild(postcode);
     fieldset.appendChild(breakLine);
+    var emailLabel = document.createElement("label");
+    emailLabel.innerHTML = "Recipient Email: ";
+    fieldset.appendChild(emailLabel);
+    var email = document.createElement("input");
+    email.setAttribute("type", "text");
+    email.setAttribute("id", "email");
+    fieldset.appendChild(email);
     var confirm = document.createElement("button");
     confirm.setAttribute("id", "confirmButton");
     confirm.setAttribute("onclick", "createOrder()");
@@ -264,7 +282,8 @@ function sendOrder(totalPrice, productIDs, orderNumber){
   var name = document.getElementById("rName").value;
   var address = document.getElementById("address").value;
   var postcode = document.getElementById("postCode").value;
-  var orderInfo = "date="+date+"&cost="+totalPrice+"&name="+name+"&address="+address+"&postcode="+postcode+"&orderNumber="+orderNumber;
+  var email = document.getElementById("email").value;
+  var orderInfo = "date="+date+"&cost="+totalPrice+"&name="+name+"&address="+address+"&postcode="+postcode+"&orderNumber="+orderNumber+"&email="+email;
   var orderID;
   console.log(productIDs);
   returnJSON(
@@ -294,10 +313,10 @@ function sendOrder(totalPrice, productIDs, orderNumber){
   );
 
 }
-function applyEventListeners() {
-  for (var x = 0; x < productTypes.length; x++) {
-    var type = productTypes[x];
-    applyIndividualListener(type, x);
+function applyEventListeners(types) {
+  for (var x = 0; x < types.length; x++) {
+    var type = types[x];
+    applyIndividualListener(type, x, types);
 
   }
 }
@@ -1476,6 +1495,7 @@ function getQuantity(){
   updateButton.onclick = function(){
     var oldQuantity = Number(document.getElementById("oldQuantity").value);
     var increaseBy = Number(document.getElementById("increaseQuantity").value);
+
     var newValue = oldQuantity + increaseBy;
     var code = document.getElementById("productCode").value;
     var newDetails = "code="+code+"&newValue="+newValue;
@@ -1579,7 +1599,7 @@ function getOrders(){
 
 );
 }
-var Order = function(name, date, cost, recipient, address, postcode, orderNumber){
+var Order = function(name, date, cost, recipient, address, postcode, orderNumber, shipped, email){
   this.orderName = name;
   this.date = date;
   this.cost = cost;
@@ -1587,6 +1607,8 @@ var Order = function(name, date, cost, recipient, address, postcode, orderNumber
   this.address = address;
   this.postcode = postcode;
   this.orderNumber = orderNumber;
+  this.shipped = shipped;
+  this.email = email;
 };
 var Product = function(name, order, price, code){
   this.productName = name;
@@ -1628,9 +1650,11 @@ function buildOrderTable(data){
                var address = orderResult[3];
                var postcode = orderResult[4];
                var orderNumber = orderResult[5];
+               var shipped = orderResult[6];
+               var email = orderResult[7];
                console.log(date, cost, name,address, postcode, orderNumber);
                if (orders.length <= 0){
-                 var orderObject = new Order(name, date, cost, name, address, postcode, orderNumber);
+                 var orderObject = new Order(name, date, cost, name, address, postcode, orderNumber, shipped, email);
                  console.log(orderObject.orderName);
                  orders.push(orderObject);
                } else{
@@ -1642,7 +1666,7 @@ function buildOrderTable(data){
                      }
                    }
                    if (orderFound === false){
-                     var orderObject = new Order(name, date, cost, name, address, postcode, orderNumber);
+                     var orderObject = new Order(name, date, cost, name, address, postcode, orderNumber, shipped, email);
                      console.log(orderObject.orderName);
                      orders.push(orderObject);
                    }
@@ -1673,7 +1697,7 @@ function buildOrderTable(data){
              target.innerHTML = '';
              for (var b = 0 ; b < orders.length; b++){
                 var order = orders[b];
-                console.log(order);
+                console.log(order.shipped);
                 var tbl = document.createElement("section");
                 tbl.setAttribute("class", "orderSection");
                 var orderLabel = document.createElement("strong");
@@ -1692,6 +1716,40 @@ function buildOrderTable(data){
                 var rPostcode = document.createElement("p");
                 rPostcode. innerHTML = "Recipient Postcode: "+order.postcode;
                 tbl.appendChild(rPostcode);
+                var rEmail = document.createElement("p");
+                rEmail.innerHTML = "Recipient Email: "+ order.email;
+                tbl.appendChild(rEmail);
+                var issueButton = document.createElement("button");
+                issueButton.innerHTML = "Report a Problem with the Order";
+                issueButton.setAttribute("onclick", "sendOrderMessage(event)");
+                issueButton.setAttribute("data-email", order.email);
+
+                tbl.appendChild(issueButton);
+                var reportTarget = document.createElement("section");
+                reportTarget.setAttribute("id", "emailText");
+                tbl.appendChild(reportTarget);
+                var orderState = document.createElement("p");
+                var status;
+                console.log(order.shipped, typeof order.shipped);
+                if (order.shipped === "0"){
+                  console.log("false");
+                  status = "Not Shipped";
+
+                } else if (order.shipped === "1"){
+                  console.log("true");
+                  status = "Shipped";
+                }
+                console.log()
+                orderState.innerHTML = "Status: "+status;
+                tbl.appendChild(orderState);
+                if (order.shipped ==="0"){
+                  var changeState = document.createElement("button");
+                  changeState.innerHTML = "Ship Order";
+                  changeState.setAttribute("onclick", "shipOrder(event)");
+                  changeState.setAttribute("data-number", order.orderNumber)
+                  tbl.appendChild(changeState);
+                  tbl.appendChild(document.createElement("br"));
+                }
                 var productLabel = document.createElement("strong");
                 productLabel.innerHTML = "Products:";
                 tbl.appendChild(productLabel);
@@ -1733,6 +1791,41 @@ function buildOrderTable(data){
 
 }
 }
+function sendOrderMessage(ev){
+  var order = ev.target;
+  var email = order.getAttribute("data-email");
+  var target =document.getElementById("emailText");
+  var area = document.createElement("input");
+  area.setAttribute("type", "text");
+  var submitButton = document.createElement("button");
+  submitButton.innerHTML = "Send Message";
+  submitButton.onclick = function(){
+    alert("You have sent "+email+" the message.");
+  }
+  target.appendChild(area);
+  target.appendChild(submitButton);
+}
+
+function shipOrder(ev){
+   var order = ev.target;
+   var number = order.getAttribute("data-number");
+   console.log("number", number);
+   var details = "number="+number;
+  postJSON(
+     details,
+     '../api/database/shipOrder.php',
+     function(data){
+
+     }
+   );
+   alert("Order: "+number+" has been shipped. This page will now refresh.");
+   ajaxGet('../api/database/orderList.html', function(data) {
+     grabElement(data, 'mainContent');
+     getOrders();
+
+   });
+}
+
 function createBin(){
   var target = document.getElementById("binArea");
   var section = document.createElement("section");
@@ -2225,8 +2318,23 @@ function moveVariables(children) {
       }
     }
   }
+  saveNewProductOrder();
 }
-
+function saveNewProductOrder(){
+  getJSON(
+    '../api/database/deleteCurrentSidebar.php',
+    function(data){}
+  );
+  for (var i =0; i < productTypes.length; i++){
+    var details = "type="+productTypes[i];
+    console.log("saving type", productTypes[i], productTypes.length);
+    postJSON(
+      details,
+      '../api/database/addNewSidebar.php',
+      function(data){}
+    );
+  }
+}
 function insertAfter(parentNode, newNode, target, children) {
   parentNode.insertBefore(newNode, target);
   moveVariables(children);
@@ -2466,7 +2574,7 @@ function generateTable() {
         } else if (j === 4) {
           cellContent = "\u00A3" + basketObject["price"];
           var itemPrice = basketObject["price"];
-          totPrice += totPrice + Number(itemPrice);
+          totPrice += Number(itemPrice);
           console.log(Number(itemPrice), typeof totPrice, totPrice);
         } else if (j === 5) {
           cellContent = basketObject["quantity"];

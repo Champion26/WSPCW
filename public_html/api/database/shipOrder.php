@@ -15,23 +15,19 @@ $products = array();
 global $i;
 $i = 0;
 try {
+  $number = $_POST['number'];
+  echo $number;
   global $dbh;
   $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
-  $sql = "SELECT productID, orderID
-          FROM productorder
-          GROUP BY orderID;";
+  $sql = "UPDATE ordertable
+          SET shipped = 1;
+          WHERE orderNumber = :orderNumber ;";
 
- global $range;
- $range = array();
- foreach ($dbh->query($sql) as $row) :
-          $productC = $row['productID'];
-          $order = $row['orderID'];
+          $query = $dbh->prepare($sql);
 
-          $product = array($productC, $order);
-          $range[] = $product;
-          $i++;
-        endforeach;
-    echo json_encode($range);
+          $query->bindValue(":orderNumber", $number);
+
+ echo "done";
 
     $dbh = null;
   }

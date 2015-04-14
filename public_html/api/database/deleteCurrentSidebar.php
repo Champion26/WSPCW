@@ -14,4 +14,6 @@ $dbh = new PDO("mysql:host=$hostname;dbname=webcw", $username, $password);
      $deleteQuery = $dbh->prepare($delete);
      $deleteQuery -> execute();
      echo "success";
+
+     $dbh = null;
      ?>

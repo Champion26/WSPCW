@@ -200,7 +200,7 @@ section {
 }
 
 #sidebar{
-  width: 230px;
+  width: 19vw;
   height: 100%;
   float: left;
   padding-top: 0px;
@@ -210,7 +210,7 @@ section {
 
 
 #mainContent{
-  margin-left: 250px;
+  margin-left: 20vw;
   height: auto;
 
 
