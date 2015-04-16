@@ -31,7 +31,7 @@ var navHeight = 2;
 var navWidth = 12;
 
 /**
-   @function
+
    @param e the event in question that called the function.
 */
 function addToBasket(e) {
@@ -45,8 +45,8 @@ function addToBasket(e) {
 }
 
 /**
-   @function
-   @description Function is used in conjunction with AJAX calls in order to grab and place page elements onto the document. Includes check if ID exists. 
+
+   @description Function is used in conjunction with AJAX calls in order to grab and place page elements onto the document. Includes check if ID exists.
    @param response The response from the AJAX request.
 */
 function grabElement(response, element) {
@@ -58,7 +58,7 @@ function grabElement(response, element) {
 }
 
 /**
-  @function
+
   @description Function sets the generic page structure that exists on each page through AJAX calls for the header and footer.
 */
 function setPageStructure() {
@@ -72,7 +72,7 @@ function setPageStructure() {
 
 }
 /**
-   @function
+
    @description Early attempt at DOM styling. No longer used.
 
 */
@@ -86,8 +86,8 @@ function setRed() {
 }
 
 /**
- * 
- * @function
+ *
+ *
  * @description Function that sets the home page through the use of event listeners on 'a' links with ids and corresponding ajax calls.
  */
 function setHome() {
@@ -127,8 +127,8 @@ function setHome() {
 }
 
 /**
- * 
- * @function
+ *
+ *
  * @description Sets the search page through event listeners and AJAX.
  */
 function setSearch() {
@@ -145,8 +145,8 @@ function setSearch() {
 }
 
 /**
- * 
- * @function
+ *
+ *
  * @description Function uses an array full of product types (retrieved from the productSidebar table with getJSON function)
  * and then creates the product sidebar according to array contents.
  * @requires getJSON function
@@ -182,14 +182,14 @@ function setProductSidebar() {
 }
 
 /**
- * @function
+ *
  * @description Applies event listener to the previous created sidebar and sorts products according to type. It then calls
  * the product table page and uses the printProducts(type) function to print out the various types.
  * @requires applyEventListeners, setProductSidebar
- * @param {type} type
- * @param {type} x
- * @param {type} types
- * @returns {undefined}
+ * @param {String} type
+ * @param {Int} x
+ * @param {Array} types
+ *
  */
 function applyIndividualListener(type, x, types) {
 
@@ -217,12 +217,12 @@ function applyIndividualListener(type, x, types) {
 }
 
 /**
- * 
- * @function
+ *
+ *
  * @description Function creates a series of input fields when the purchase button is pressed on the basket page.
  * This also includes a button which when physically submits the order into the system. All elements are created
  * within the DOM and then appended onto the document.
- * @returns {undefined}
+ *
  */
 function getOrderDetails(){
   var orderButton = document.getElementById("purchaseButton");
@@ -274,21 +274,21 @@ function getOrderDetails(){
   };
 }
 /**
- * @function 
+ *
  * @description This function produces a random int according to user input. It returns a random int between the two user
  * set values. Used in the creation of order numbers
- * @param {type} min
- * @param {type} max
+ * @param {Int} min
+ * @param {Int} max
  * @returns {Number}
  */
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 /**
- * @function
+ *
  * @description This function is run when the user submits  the order. It gathers the products involved in the order, retrieves
  * their IDs from the server and then runs sendOrder when a response is recieved.
- * @returns {undefined}
+ *
  */
 function createOrder(){
   console.log("creating order");
@@ -335,14 +335,14 @@ function createOrder(){
 
 }
 /**
- * @function
- * @description This function is carried out once the product IDs of the order is recieved. This function creates an order 
+ *
+ * @description This function is carried out once the product IDs of the order is recieved. This function creates an order
  * according to the user set information and the uses the product IDs and the ID of the order just created in order to fill
  * 'orderProduct' which is a table that lists what product was involved in what order.
- * @param {type} totalPrice
- * @param {type} productIDs
- * @param {type} orderNumber
- * @returns {undefined}
+ * @param {Int} totalPrice
+ * @param {Array} productIDs
+ * @param {Int} orderNumber
+ *
  */
 function sendOrder(totalPrice, productIDs, orderNumber){
   var date = new Date();
@@ -395,10 +395,10 @@ function sendOrder(totalPrice, productIDs, orderNumber){
 }
 
 /**
- * @function
+ *
  * @description This function loops through the avaliable product types and then calls applyIndividualListeners  for each type.
- * @param {type} types
- * @returns {undefined}
+ * @param {Array} types
+ *
  */
 function applyEventListeners(types) {
   for (var x = 0; x < types.length; x++) {
@@ -409,10 +409,10 @@ function applyEventListeners(types) {
 }
 
 /**
- * @function
+ *
  * @description This function sets the product page and sub pages through the use of event listeners on 'a' links
  * and AJAX calls for page elements.
- * @returns {undefined}
+ *
  */
 function setProducts() {
 
@@ -431,12 +431,12 @@ function setProducts() {
 }
 
 /**
- * @function
+ *
  * @description This function was created in order to test the responses recieved from ajax related functions. It is no-
  * longer used as of the final version.
- * @param {type} response
- * @returns {undefined}
- * 
+ * @param {Array} response
+ *
+ *
  */
 function callbackAlert(response) {
   console.log(response);
@@ -444,12 +444,12 @@ function callbackAlert(response) {
 }
 
 /**
- * @function 
- * @description This function is used to update the product that the admin has edited on the edit page. This is achieved by taking 
- * the values from the inputs on the document, creating a url (which a php page can handle) and then posting it to a specially 
+ *
+ * @description This function is used to update the product that the admin has edited on the edit page. This is achieved by taking
+ * the values from the inputs on the document, creating a url (which a php page can handle) and then posting it to a specially
  * built php responder.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function submitChanges(e) {
   e.preventDefault();
@@ -486,12 +486,12 @@ function submitChanges(e) {
 }
 
 /**
- * @function
+ *
  * @description This function was created in conjunction with my editable anywhere idea in which an admin only has to click
  * on an element they wish to edit. This was orignally achieved through setting attributes through click event listeners.
  * This function has been abandoned for a more preferable and functional option.
- * @param {type} id
- * @returns {undefined}
+ * @param {String} id
+ *
  */
 function makeEditable(id) {
   var change = document.getElementById(id);
@@ -502,12 +502,12 @@ function makeEditable(id) {
 }
 
 /**
- * @function
+ *
  * @description the function applies two attributes (contenteditable which allows the element to be edited anytime and ondrop
- * which determines what happens when a user drops a dragged object onto it) to the passed element. This only occurs when the 
+ * which determines what happens when a user drops a dragged object onto it) to the passed element. This only occurs when the
  * element is 'clicked'.
- * @param {type} element
- * @returns {undefined}
+ * @param {Element} element
+ *
  */
 function applyEdits(element) {
   element.addEventListener("click", function() {
@@ -518,11 +518,11 @@ function applyEdits(element) {
   });
 }
 /**
- * @function
- * @description This function merely sends its passed variable to a php responder. The responder in question updates 
+ *
+ * @description This function merely sends its passed variable to a php responder. The responder in question updates
  * the individual aspects of the website such as the description or the title.
- * @param {type} changed
- * @returns {undefined}
+ * @param {String} changed
+ *
  */
 function postChanges(changed) {
   postJSON(
@@ -534,12 +534,12 @@ function postChanges(changed) {
   );
 }
 /**
- * @function
+ *
  * @description This function is used to send the chages the admin makes to the page to the database. This is achieved through
- * checking the keys used in the event and if they match the criteria (Shift + E) then it loops through the changes made and 
+ * checking the keys used in the event and if they match the criteria (Shift + E) then it loops through the changes made and
  * updates it in the database.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function sendDBChanges(e) {
   console.log("running");
@@ -556,11 +556,11 @@ function sendDBChanges(e) {
 }
 
 /**
- * @function
+ *
  * @description Function loops through the changes array and if the element in question isn't found an array is created
  * containing the element's id and its innerHTML, this array is then pushed into the changes array.
- * @param {type} element
- * @returns {undefined}
+ * @param {Element} element
+ *
  */
 function sendChanges(element) {
   var id = element.getAttribute("id");
@@ -581,11 +581,11 @@ function sendChanges(element) {
 
 }
 /**
- * @function
+ *
  * @description Function applies two event listeners to the element it is passed. If uses clicks the element the keypress listener is placed
  * and if that listener is activated then the system waits 3 seconds and calls the sendChanges function.
- * @param {type} element
- * @returns {undefined}
+ * @param {Element} element
+ *
  */
 function saveChanges(element) {
 
@@ -598,9 +598,9 @@ function saveChanges(element) {
   });
 }
 /**
- * @function
+ *
  * @description Function retrieves the individual site details, such as the set description from the server.
- * @returns {undefined}
+ *
  */
 function getDetails() {
   getJSON("../api/database/selectDetails.php", function(data) {
@@ -611,11 +611,11 @@ function getDetails() {
 }
 
 /**
- * @function
+ *
  * @description This function takes the details that were retrieved from the server and pushes them into a local array
  * named 'dbRetrievedDetails' and then calls loadSiteDetails.
- * @param {type} data
- * @returns {undefined}
+ * @param {Array} data
+ *
  */
 function addDetails(data) {
   for (var i = 0; i < data.length; i++) {
@@ -624,11 +624,11 @@ function addDetails(data) {
   loadSiteDetails();
 }
 /**
- * @function
+ *
  * @description This function loops through all elements on the page and if said element has the 'data-edit' attribute
  * then the function loops through the local 'dbRetrievedDetails' array and sets the elements innerHTML to what is stored in the array
  * according to it's id. This function is run at each page load.
- * @returns {undefined}
+ *
  */
 function loadSiteDetails() {
   var all = document.getElementsByTagName("*");
@@ -647,10 +647,10 @@ function loadSiteDetails() {
   }
 }
 /**
- * @function
- * @description This function merely loops through all elements on the page and then calls a series of functions if 
+ *
+ * @description This function merely loops through all elements on the page and then calls a series of functions if
  * the element has the 'data-edit' attribute.
- * @returns {undefined}
+ *
  */
 function findEditableElements() {
   var all = document.getElementsByTagName("*");
@@ -670,9 +670,9 @@ function findEditableElements() {
   }
 }
 /**
- * @function
+ *
  * @description  Function applies the attribute 'contenteditable' to every element that is part of the class 'editable'.
- * @returns {undefined}
+ *
  */
 function editable() {
   var classname = document.getElementsByClassName("editable");
@@ -686,12 +686,12 @@ function editable() {
   }
 }
 /**
- * @function
+ *
  * @description This function is used to retrieve the details of products according to their code for the admin(s) to edit
  * the product. This is acheived through posting a php responder the product code which returns the rest of the product's details.
  * These details are then set to the document's inputs values so the admin can edit said details.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function getSearch(e) {
   searchResults = [];
@@ -725,10 +725,10 @@ function getSearch(e) {
   );
 }
 /**
- * @function
+ *
  * @description This function merely sends the passed variable to the php responder.
- * @param {type} presetElement
- * @returns {undefined}
+ * @param {String} presetElement
+ *
  */
 function addPreset(presetElement) {
 
@@ -740,11 +740,11 @@ function addPreset(presetElement) {
 }
 
 /**
- * @function
+ *
  * @description This function was created to be used with the ajaxGet function to upload all editable fields to the database
  * so that each id and content would not have to be entered manually. This needs to be run if ever the site has been expanded
  * so if editable elements are on those new pages they are saved to the database.
- * @returns {undefined}
+ *
  */
 function setAllContent() {
   console.log("setting");
@@ -777,12 +777,12 @@ function setAllContent() {
   console.log(siteDetails);
 }
 /**
- * @function
+ *
  * @description This function's purpose is to just delete existing product types. All it does is send the product type on the
  * page's form to a php responder which then deletes said type from the system. It then retrieves the new list of types
  * from the database.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function deleteType(e) {
   e.preventDefault();
@@ -802,11 +802,11 @@ function deleteType(e) {
 }
 
 /**
- * @function
+ *
  * @description This function takes the response from the ajax function and then pushes each record into the local results
  * array.
- * @param {type} response
- * @returns {undefined}
+ * @param {Array} response
+ *
  */
 function getSearchResult(response) {
   for (var i = 0; i < response.length; i++) {
@@ -818,11 +818,11 @@ function getSearchResult(response) {
 }
 
 /**
- * @function
+ *
  * @description This function was created to handle the search results. It iterates through the response and adds the results
  * into the local array as long as the same result doesn't already exist in said array.
- * @param {type} response
- * @returns {undefined}
+ * @param {Array} response
+ *
  */
 function getSearchBy(response) {
   console.log(response);
@@ -849,11 +849,11 @@ function getSearchBy(response) {
 }
 
 /**
- * @function
+ *
  * @description This function takes the user input from the input and sends it to a php responder. Functions (such as getSearchBy
  * are then called to handle the response and print out the results into a table on the search page.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function searchByName(e) {
 
@@ -878,12 +878,12 @@ function searchByName(e) {
 }
 
 /**
- * @function
+ *
  * @description This function is an evolution of the searchByName function, it is instead used by the search bar in the header.
- * This function works much like the searchByName function works in that it sends the input values to a php responder and then 
+ * This function works much like the searchByName function works in that it sends the input values to a php responder and then
  * prints out the results after the page has been changes to the 'search results' page.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function searchByNameGlobal(e) {
 
@@ -926,11 +926,11 @@ function searchByNameGlobal(e) {
 
 
 /**
- * @function
- * @description This function searches through the database according to the product code and then prints out the results in the 
+ *
+ * @description This function searches through the database according to the product code and then prints out the results in the
  * form of a table.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function searchByCode(e) {
   e.preventDefault();
@@ -953,13 +953,13 @@ function searchByCode(e) {
 
 }
 /**
- * @function
- * @description This function is used to highlight the page elements that the admin can edit. This requires the user to 
+ *
+ * @description This function is used to highlight the page elements that the admin can edit. This requires the user to
  * press both (Shift and E ) which then sets border of said elements to a large red one. Once the user has stopped holding
  * said keys the style returns to normal. This is achieved  through
  * looping through all elements with the data-edit attribute and setting their style in the DOM.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function showEditable(e) {
 
@@ -979,11 +979,11 @@ function showEditable(e) {
   document.addEventListener("keyup", resetEditables);
 }
 /**
- * @function
+ *
  * @description This function resets the element's styles back to previous after they have been highlighted. This is achieved  through
  * looping through all elements with the data-edit attribute and setting their style in the DOM.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function resetEditables(e) {
   if (e.keyCode == 69 && e.shiftKey) {
@@ -999,17 +999,17 @@ function resetEditables(e) {
   }
 }
 /**
- * @function 
+ *
  * @description Event listener that calls showEditable when a key is pressed down.
  */
 document.addEventListener("keydown", showEditable);
 
 /**
- * @function
+ *
  * @description This function is used to print out the results of a search. This is achieved through .createElement
- * in order to create the structure of a html table and then the function iterates through the local searchArray in order 
+ * in order to create the structure of a html table and then the function iterates through the local searchArray in order
  * to fill said table.
- * @returns {undefined}
+ *
  */
 function printSearch() {
   // get the reference for the body
@@ -1116,12 +1116,12 @@ function printSearch() {
 }
 
 /**
- * @function
+ *
  * @description This function is used to add new product types to the system. This is achieved through posting a php
- * responder the new type which then runs an SQL query to insert it. Once it has been submitted the product types 
+ * responder the new type which then runs an SQL query to insert it. Once it has been submitted the product types
  * are refreshed.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function addProductType(e) {
   e.preventDefault();
@@ -1144,10 +1144,10 @@ function addProductType(e) {
 }
 
 /**
- * @function
+ *
  * @description This function generates a stock report in a .txt format as well as in a table. This is achieved through taking the values
  * from the inputs on the page (Author etc), retrieving the stock data from the system and then calling printTable when the stock data is received.
- * @returns {undefined}
+ *
  */
 function generateReport() {
 
@@ -1210,15 +1210,15 @@ function generateReport() {
 };
 
 /**
- * @function
+ *
  * @description This function handles the report and stock data. It first sends the report data to a php responder which creates the file
- * and then it loops through the stock data and sends that to a different php reponder, which appends the created file with the new 
+ * and then it loops through the stock data and sends that to a different php reponder, which appends the created file with the new
  * information.
- * @param {type} title
- * @param {type} author
- * @param {type} date
- * @param {type} stockData
- * @returns {undefined}
+ * @param {String} title
+ * @param {String} author
+ * @param {String} date
+ * @param {Array} stockData
+ *
  */
 function printTable(title, author, date, stockData){
   reportDetails = "title="+title+"&author="+author+"&date="+date;
@@ -1250,12 +1250,12 @@ function printTable(title, author, date, stockData){
   }
 }
 /**
- * @function
+ *
  * @description This function generates the stock table in conjunction with the .txt report file. This is achieved through
  * creating the table structure in the DOM and then appending it to the document. The stock data array prodvides the information to fill
  * the cells.
- * @param {type} stockData
- * @returns {undefined}
+ * @param {Array} stockData
+ *
  */
 function generateReportTable(stockData) {
   // get the reference for the body
@@ -1319,11 +1319,11 @@ function generateReportTable(stockData) {
 
 
 /**
- * @function
+ *
  * @description This function is called when an admin is adding a new product. To begin the function checks if the file upload
  * input has a file, if so it uses a php responder to upload said file (in this instance an image) and set it in the '/images' directory
  * and then takes the rest of the product information and sends that to the server in the form of getResult call.
- * @returns {undefined}
+ *
  */
 function sendImage() {
 
@@ -1376,12 +1376,12 @@ function sendImage() {
 }
 
 /**
- * @function
+ *
  * @description This function is called when the image has been uploaded (or if no image was uploaded at all). The values are
  * taken from the document's inputs and the sent to the server to be uploaded. The inputs on the page are then emptied.
- * @param {type} e
- * @param {type} filename
- * @returns {undefined}
+ * @param {Event} e
+ * @param {String} filename
+ *
  */
 function getResult(e, filename) {
   e.preventDefault();
@@ -1440,11 +1440,11 @@ function getResult(e, filename) {
   }
 }
 /**
- * @function
+ *
  * @description This function was created with the purpose of sending new product information to the server through formData.
  * This idea was scrapped and this function is unused but kept as a point of reference.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function getResultForm(e) {
   e.preventDefault();
@@ -1470,9 +1470,9 @@ function getResultForm(e) {
 
 }
 /**
- * @function 
+ *
  * @description This function sets the offers page through ajax and event listeners. The 'Offers' page was scrapped.
- * @returns {undefined}
+ *
  */
 function setOffers() {
 
@@ -1493,10 +1493,10 @@ function setOffers() {
 }
 
 /**
- * @function
+ *
  * @description This function sets the input field values on the 'Set Site Details' page on the CMS.
  * This is done so the user can see what the details are already set to and adjust them accordingly if necessary.
- * @returns {undefined}
+ *
  */
 function setAdminFieldContent() {
   console.log(document.getElementById("pageTitle").innerHTML);
@@ -1518,9 +1518,9 @@ function setAdminFieldContent() {
 
 }
 /**
- * @function
+ *
  * @description This function resets the page when the user changes site details.
- * @returns {undefined}
+ *
  */
 function setAdminAfterColourChange(){
 
@@ -1545,11 +1545,11 @@ function setAdminAfterColourChange(){
 
 }
 /**
- * @function
+ *
  * @description This function submits the admin set site details to the server. It collects the input values and sends
  * them to the server in the form of a url in a post request. The global variables that determine page details are then set with
  * the user defined values.
- * @returns {undefined}
+ *
  */
 function submitSiteEdits() {
   console.log("running");
@@ -1599,17 +1599,17 @@ function submitSiteEdits() {
   }
 }
 /**
- * @function
+ *
  * @description This function runs each time ajaxGet is called. It sets the various site details that determine aspects such
  * as the colour of the headings.
- * @param {type} colour
- * @param {type} textColour
- * @param {type} navColour
- * @param {type} headingColour
- * @param {type} imageSize
- * @param {type} navHeight
- * @param {type} navWidth
- * @returns {undefined}
+ * @param {String} colour
+ * @param {String} textColour
+ * @param {String} navColour
+ * @param {String} headingColour
+ * @param {Int} imageSize
+ * @param {Int} navHeight
+ * @param {Int} navWidth
+ *
  */
 function setColour(colour, textColour, navColour, headingColour, imageSize, navHeight, navWidth){
   var tables = document.querySelectorAll("table", "td", "th");
@@ -1634,13 +1634,13 @@ function setColour(colour, textColour, navColour, headingColour, imageSize, navH
 
 }
 /**
- * @function
+ *
  * @description Function sets the width and height of the 'a' elements on the site by iterating through the array
  * of them.
- * @param {type} array
- * @param {type} height
- * @param {type} width
- * @returns {undefined}
+ * @param {Array} array
+ * @param {Int} height
+ * @param {Int} width
+ *
  */
 function setHeightWidth(array, height, width){
     for (var i = 0; i < array.length; i++){
@@ -1652,11 +1652,11 @@ function setHeightWidth(array, height, width){
     }
 }
 /**
- * @function
+ *
  * @description Function sets site-wide image side according to user defined values.
- * @param {type} array
- * @param {type} imageSize
- * @returns {undefined}
+ * @param {Array} array
+ * @param {Int} imageSize
+ *
  */
 function setImageSize(array, imageSize){
     for (var i = 0; i < array.length; i++){
@@ -1667,12 +1667,12 @@ function setImageSize(array, imageSize){
     }
 }
 /**
- * @function
+ *
  * @description This function is used to set various styling options, determined by the array, colour and option the function is set.
- * @param {type} array
- * @param {type} colour
- * @param {type} option
- * @returns {undefined}
+ * @param {Array} array
+ * @param {String} colour
+ * @param {String} option
+ *
  */
 function tagArray(array, colour, option){
   for (var i = 0; i < array.length; i++){
@@ -1688,10 +1688,10 @@ function tagArray(array, colour, option){
   }
 }
 /**
- * @function
- * @description  This function is used to fill drop down menus with the existing product types. Achieved by updating 
+ *
+ * @description  This function is used to fill drop down menus with the existing product types. Achieved by updating
  * the datalist of the forms with the details from the productTypes Array.
- * @returns {undefined}
+ *
  */
 function getTypes() {
   var options = '';
@@ -1703,9 +1703,9 @@ function getTypes() {
   document.getElementById('types').innerHTML = options;
 }
 /**
- * @function
+ *
  * @description Function abandoned. Kept for reference. Was used before moving canvas was implemented.
- * @returns {undefined}
+ *
  */
 function createSetBar() {
   var target = document.getElementById("productLineup");
@@ -1730,10 +1730,10 @@ function createSetBar() {
 }
 
 /**
- * @function
+ *
  * @description Function changes the order of the productTypes array to change product sidebar.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function setOrder(e) {
   for (var i = 0; i < productTypes.length; i++) {
@@ -1745,11 +1745,11 @@ function setOrder(e) {
   }
 }
 /**
- * @function 
+ *
  * @description  This function is used in conjunction with the 'ondrop' attribute. This function reades the .txt file in question
  * and changes the innerHTML of the element to the txt file's contents if the element has the 'data-edit' attribute.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function dropTXTFile(e){
   e.preventDefault();
@@ -1779,11 +1779,11 @@ function dropTXTFile(e){
 
 }
 /**
- * @function
+ *
  * @description This function is used for dropping images onto the page for upload. It simply adds the file of the dragged object
  * to the upload file list.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 function dropFile(e){
      e.preventDefault();
@@ -1793,10 +1793,10 @@ function dropFile(e){
 }
 
 /**
- * @function
+ *
  * @description Function creates the canvases that correspond to the existing product types. It loops through the existing array
  * and creates a canvas for each one and sets the attributes that allow for dragging and movement.
- * @returns {undefined}
+ *
  */
 function createCanvas() {
   console.log("working");
@@ -1820,20 +1820,20 @@ function createCanvas() {
 }
 
 /**
- * @function
+ *
  * @description This function simply prevents the standard course of action when the dragged object is hovering over an element.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function allowDrop(ev) {
   ev.preventDefault();
 }
 
 /**
- * @function
+ *
  * @description This function allows for an element to be dragged.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function drag(ev) {
   ev.dataTransfer.setData("text", ev.target.id);
@@ -1841,10 +1841,10 @@ function drag(ev) {
 }
 
 /**
- * @function
+ *
  * @description  This function moves the variables within the productTypes array according to the array its passed and using the splice function.
- * @param {type} children
- * @returns {undefined}
+ * @param {Array} children
+ *
  */
 function moveVariablesOld(children) {
   console.log(children.length);
@@ -1865,13 +1865,13 @@ function moveVariablesOld(children) {
   }
 }
 /**
- * @function
+ *
  * @description This function moves the nodes within the parent nodes using the passed variables.
- * @param {type} parentNode
- * @param {type} newNode
- * @param {type} target
- * @param {type} children
- * @returns {undefined}
+ * @param {Element} parentNode
+ * @param {Element} newNode
+ * @param {Element} target
+ * @param {Element} children
+ *
  */
 function insertAfter(parentNode, newNode, target, children) {
   parentNode.insertBefore(newNode, target);
@@ -1879,10 +1879,10 @@ function insertAfter(parentNode, newNode, target, children) {
 }
 
 /**
- * @function
+ *
  * @description This function retrieves all the information required to move the canvas' on the page. The insertAfter call actually moves the elements.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function drop(ev) {
   ev.preventDefault();
@@ -1903,11 +1903,11 @@ function drop(ev) {
 }
 
 /**
- * @function
+ *
  * @description This function encompasses two buttons. The first uses a server request to provide the user
- * the quantity of a product according to the set product code. The second takes the quantity change details and sends them to the server in order to change the 
+ * the quantity of a product according to the set product code. The second takes the quantity change details and sends them to the server in order to change the
  * quantity on the system.
- * @returns {undefined}
+ *
  */
 function getQuantity(){
   var getOldButton = document.getElementById("getQuantity");
@@ -1953,12 +1953,12 @@ function getQuantity(){
 }
 
 /**
- * @function
+ *
  * @description Function sets the admin page and sub pages through event listeners and ajax calls.
- * @returns {undefined}
+ *
  */
 function setAdmin(){
-  document.getElementById("adminPage").addEventListener("click", function(data) { 
+  document.getElementById("adminPage").addEventListener("click", function(data) {
 
     ajaxGet('../api/navigation/adminSidebar.php', function(data) {
       grabElement(data, 'sidebar');
@@ -1987,10 +1987,10 @@ function setAdmin(){
 }
 
 /**
- * @function
- * @description Function takes the code value from the page and checks if it is an existing product if so it produces an 
- * alert stating this with a call to createDeleteImages. 
- * @returns {undefined}
+ *
+ * @description Function takes the code value from the page and checks if it is an existing product if so it produces an
+ * alert stating this with a call to createDeleteImages.
+ *
  */
 function deletePage(){
   var checkButton = document.getElementById("deleteButton");
@@ -2019,11 +2019,11 @@ function deletePage(){
 
 }
 /**
- * @function
+ *
  * @description Function creates a product image and appends onto the page as well as setting attributes that allow the
  * image to be dragged and dropped. Once image has been appended a call to createBin is made.
- * @param {type} code
- * @returns {undefined}
+ * @param {String} code
+ *
  */
 function createDeleteImages(code){
   console.log("working");
@@ -2047,10 +2047,10 @@ function createDeleteImages(code){
 }
 
 /**
- * @function
+ *
  * @description Function creates a loading image and then makes a server call to retrieve the orders. Once a response
  * is recieved a table with all the orders is created.
- * @returns {undefined}
+ *
  */
 function getOrders(){
   var loading = document.createElement("img");
@@ -2066,15 +2066,15 @@ function getOrders(){
 /**
  * @class Represents an order.
  * @description This class represents an order. Includes all the information necessary to reference an order on the system.
- * @param {type} name
- * @param {type} date
- * @param {type} cost
- * @param {type} recipient
- * @param {type} address
- * @param {type} postcode
- * @param {type} orderNumber
- * @param {type} shipped
- * @param {type} email
+ * @param {String} name
+ * @param {String} date
+ * @param {Int} cost
+ * @param {String} recipient
+ * @param {String} address
+ * @param {String} postcode
+ * @param {Int} orderNumber
+ * @param {String} shipped
+ * @param {String} email
  * @returns {Order}
  */
 var Order = function(name, date, cost, recipient, address, postcode, orderNumber, shipped, email){
@@ -2090,10 +2090,10 @@ var Order = function(name, date, cost, recipient, address, postcode, orderNumber
 };
 /**
  * @class Represents an individual product;
- * @param {type} name
- * @param {type} order
- * @param {type} price
- * @param {type} code
+ * @param {String} name
+ * @param {String} order
+ * @param {Int} price
+ * @param {String} code
  * @returns {Product}
  */
 var Product = function(name, order, price, code){
@@ -2104,11 +2104,11 @@ var Product = function(name, order, price, code){
   this.quantity = 1;
 };
 /**
- * @function Function uses passed variable to retrieve details on individual orders and products associated with those orders.
+ *  Function uses passed variable to retrieve details on individual orders and products associated with those orders.
  * This data is then grouped together and the necessary elements are created in the DOM and appended to produce lists of orders
  * and their details on the Admin-order page.
- * @param {type} data
- * @returns {undefined}
+ * @param {Array} data
+ *
  */
 function buildOrderTable(data){
    console.log(data);
@@ -2285,11 +2285,11 @@ function buildOrderTable(data){
 }
 }
 /**
- * @function
+ *
  * @description  Function takes details from the button that fired the event and creates an input field and button that allows
  * the admin to send a message to the customer if there is an issue.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function sendOrderMessage(ev){
   var order = ev.target;
@@ -2307,11 +2307,11 @@ function sendOrderMessage(ev){
 }
 
  /**
- * @function
+ *
  * @description Function takes the order number (which was set as an attribute on the button that fired the event), sends it to the
  * server where the shipped status is changed to 'shipped' and the order page is then refreshed.
-* @param {type} ev
-* @returns {undefined}
+* @param {Event} ev
+*
 */
 function shipOrder(ev){
    var order = ev.target;
@@ -2334,9 +2334,9 @@ function shipOrder(ev){
 }
 
 /**
- * @function
+ *
  * @description Function creates a bin image that is produced when the user enters a valid product code that is to be deleted.
- * @returns {undefined}
+ *
  */
 function createBin(){
   var target = document.getElementById("binArea");
@@ -2356,11 +2356,11 @@ function createBin(){
   target.appendChild(section);
 }
 /**
- * @function
+ *
  * @description Function defines what is to be done when the product image is dropped over the bin. Upon drop the code of
  * the product is sent to the server where said product is deleted from records.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function dropDeleteImage(ev){
 
@@ -2387,10 +2387,10 @@ function dropDeleteImage(ev){
 }
 
 /**
- * @function
- * @description Function sets the CMS page page through event listeners that produce ajax calls. 
  *
- * @returns {undefined}
+ * @description Function sets the CMS page page through event listeners that produce ajax calls.
+ *
+ *
  */
 function setCMS() {
   document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
@@ -2453,9 +2453,9 @@ function setCMS() {
 }
 
 /**
- * @function
+ *
  * @description This function sets the basket page and sub pages through event listeners and ajax calls.
- * @returns {undefined}
+ *
  */
 function setBasket() {
   document.getElementById("myBasket").addEventListener("click", function(data) { /*offer sidebar & page */
@@ -2475,9 +2475,9 @@ function setBasket() {
 }
 
 /**
- * @function
+ *
  * @description Function sets intial page and general page structure through a series of function calls.
- * @returns {undefined}
+ *
  */
 function setPage() {
   setPageStructure();
@@ -2496,9 +2496,9 @@ function setPage() {
 }
 
 /**
- * @function
+ *
  * @description Page sets elements of intial page load.
- * @returns {undefined}
+ *
  */
 function pageLoad() {
   document.addEventListener("keypress", function(){
@@ -2546,9 +2546,9 @@ function pageLoad() {
 }
 
 /**
- * @function
+ *
  * @description Function retrieves existing product types from the server.
- * @returns {undefined}
+ *
  */
 function refreshTypes() {
   getJSON("../api/database/selectProductType.php", function(data) {
@@ -2557,12 +2557,12 @@ function refreshTypes() {
 }
 
 /**
- * @function
+ *
  * @class Creates custom event that listens for products to be added to the basket.
  * - Based on examples provided from Dr Rich Boakes.
- * @param {type} detail
- * @param {type} quantity
- * @returns {undefined}
+ * @param {Object} detail
+ * @param {Int} quantity
+ *
  */
 var fireBasketEvent = function(detail, quantity) {
   //alert('basket fired');
@@ -2579,8 +2579,8 @@ var fireBasketEvent = function(detail, quantity) {
 /**
  * @class Fires basket event using the product details on each product button (JSON object) and parsing of said JSON object.
  * - Based on examples provided from Dr Rich Boakes.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 var clicked = function(e) {
   //alert('clicked running');
@@ -2591,9 +2591,9 @@ var clicked = function(e) {
 };
 
 /**
- * @function
+ *
  * @description Function applies event listeners to all buttons, calls 'clicked' when intiated.
- * @returns {undefined}
+ *
  */
 function getButtons() {
   var buttons = document.querySelectorAll("button");
@@ -2612,11 +2612,11 @@ document.addEventListener(
 );
 
 /**
- * @class Class uses details on the event button to create objects and add them to the 'myBasket' local array. This 
- * array is then submitted to local storage. If the product that is trying to be added already exists in the array then the 
+ * @class Class uses details on the event button to create objects and add them to the 'myBasket' local array. This
+ * array is then submitted to local storage. If the product that is trying to be added already exists in the array then the
  * quantity is just increased.
- * @param {type} e
- * @returns {undefined}
+ * @param {Event} e
+ *
  */
 var countItems = function(e) {
   var code = e.detail.productCode;
@@ -2702,11 +2702,11 @@ var countItems = function(e) {
 document.addEventListener('basket', countItems);
 
  /**
- * @function
+ *
  * @description Function iterates through the ajax response and pushes each result into the local array for product
  * types.
- * @param {type} response
- * @returns {undefined}
+ * @param {Array} response
+ *
  */
 function getProductTypes(response) {
   for (var i = 0; i < response.length; i++) {
@@ -2716,11 +2716,11 @@ function getProductTypes(response) {
   console.log(productTypes);
 }
 /**
- * @function
+ *
  * @description Function handles the response from the server and retrieves the individual site details and then
  * sets the global variables to said details. Function then resets the page.
- * @param {type} response
- * @returns {undefined}
+ * @param {Array} response
+ *
  */
 function getScheme(response){
       var scheme = response[0];
@@ -2767,10 +2767,10 @@ function getScheme(response){
     console.log("scheme");
 }
 /**
- * @function
+ *
  * @description Function takes response from ajax call and pushes results into local product array.
- * @param {type} response
- * @returns {undefined}
+ * @param {Array} response
+ *
  */
 function getProducts(response) {
   for (var i = 0; i < response.length; i++) {
@@ -2781,11 +2781,11 @@ function getProducts(response) {
 }
 
 /**
- * @function 
+ *
  * @description This function creates and appends table according to the product array. It only prints products according to
  * passed product type. Table structure is created in DOM and then appended to document.
- * @param {type} type
- * @returns {undefined}
+ * @param {String} type
+ *
  */
 function printProducts(type) {
   // get the reference for the body
@@ -2897,10 +2897,10 @@ function printProducts(type) {
 
 }
 /**
- * @function
+ *
  * @description  This function moves the variables within the productTypes array according to the array its passed and using the splice function.
- * @param {type} children
- * @returns {undefined}
+ * @param {Array} children
+ *
  */
 function moveVariables(children) {
   console.log(children.length);
@@ -2922,10 +2922,10 @@ function moveVariables(children) {
   saveNewProductOrder();
 }
 /**
- * @function
+ *
  * @description Function produces server call to delete current sidebar in productTable and then posts each
  * productType to server to add to newly emptied table.
- * @returns {undefined}
+ *
  */
 function saveNewProductOrder(){
   getJSON(
@@ -2944,11 +2944,11 @@ function saveNewProductOrder(){
 }
 
 /**
- * @function
- * @description Function that handles the dropping of product images onto the basket image. On drop a basket event is fired 
+ *
+ * @description Function that handles the dropping of product images onto the basket image. On drop a basket event is fired
  * using the data-detail attribute set on the product image.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 
 function dropImage(ev) {
@@ -2966,12 +2966,12 @@ function dropImage(ev) {
 
 }
 /**
- * @function
+ *
  * @description  Function applies event listeners to the individual rows on a product table and calls createProductPage.
- * @param {type} cell
- * @param {type} item
- * @param {type} i
- * @returns {undefined}
+ * @param {Element} cell
+ * @param {Array} item
+ * @param {Int} i
+ *
  */
 function setTDEventListener(cell, item, i) {
   cell.addEventListener("click", function() {
@@ -2979,9 +2979,9 @@ function setTDEventListener(cell, item, i) {
   });
 }
 /**
- * @function
+ *
  * @description Function retrieves product information from page, creates object and inserts it into the changedProducts array.
- * @returns {undefined}
+ *
  */
 function getProductDetails(){
   console.log("getting changes");
@@ -3013,10 +3013,10 @@ function getProductDetails(){
   }
 }
 /**
- * @function
+ *
  * @description Function iterates through all elements on the page and if criteria (has data-edit attribute) is met then
  * a call to getProductDetails is made after 3 seconds.
- * @returns {undefined}
+ *
  */
 function getProductChanges(){
   console.log("running changes");
@@ -3042,11 +3042,11 @@ function getProductChanges(){
   }
 
 /**
- * @function
+ *
  * @description Function iterates through the changedProducts array and sends each record to the server. Call to
  * whenChangesSet once all of array is sent.
- * 
- * @returns {undefined}
+ *
+ *
  */
 function sendProductChanges(){
   for (var i = 0; i <changedProducts.length; i++){
@@ -3067,9 +3067,9 @@ function sendProductChanges(){
 setTimeout(whenChangesSet, 1000);
 }
 /**
- * @function 
+ *
  * @description Function clears changedProductArray and refreshers the list of products.
- * @returns {undefined}
+ *
  */
 function whenChangesSet(){
   changedProducts=[];
@@ -3077,9 +3077,9 @@ function whenChangesSet(){
 
 }
 /**
- * @function
+ *
  * @description If an element with the id 'productPage' is present a call to sendProductChanges is made else no action.
- * @returns {undefined}
+ *
  */
 function ifSend(){
       console.log(document.getElementById("productPage"));
@@ -3094,18 +3094,18 @@ function ifSend(){
       }
 }
 /**
- * @function 
+ *
  * @description Function uses ajax function to call the productPage.html and calls functions to create the html elements
  * such as the product details and image.
- * @param {type} productCode
- * @param {type} productName
- * @param {type} desc
- * @param {type} price
- * @param {type} quantity
- * @param {type} i
- * @param {type} item
- * @param {type} imageLocation
- * @returns {undefined}
+ * @param {String} productCode
+ * @param {String} productName
+ * @param {String} desc
+ * @param {Int} price
+ * @param {Int} quantity
+ * @param {Int} i
+ * @param {Array} item
+ * @param {String} imageLocation
+ *
  */
 function createProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
   ajaxGet('../api/database/productPage.html', function(data) {
@@ -3118,18 +3118,18 @@ function createProductPage(productCode, productName, desc, price, quantity, i, i
 }
 
 /**
- * @function
+ *
  * @description Function determines what details are set on the product page, specifically image. Function sets the product image according
  * to relative path associated with the image, if there is no image path set for the product then the placeholder image is set.
- * @param {type} productCode
- * @param {type} productName
- * @param {type} desc
- * @param {type} price
- * @param {type} quantity
- * @param {type} i
- * @param {type} item
- * @param {type} imageLocation
- * @returns {undefined}
+ * @param {String} productCode
+ * @param {String} productName
+ * @param {String} desc
+ * @param {Int} price
+ * @param {Int} quantity
+ * @param {Int} i
+ * @param {Array} item
+ * @param {String} imageLocation
+ *
  */
 function setProductPage(productCode, productName, desc, price, quantity, i, item, imageLocation) {
   document.getElementById("productPageCode").innerHTML = productCode;
@@ -3163,11 +3163,11 @@ function setProductPage(productCode, productName, desc, price, quantity, i, item
 }
 
 /**
- * @function
+ *
  * @description   Function creates product button according to the variables passed.
- * @param {type} item
- * @param {type} i
- * @returns {undefined}
+ * @param {Array} item
+ * @param {Int} i
+ *
  */
 function createProductButton(item, i) {
   console.log("asd");
@@ -3193,10 +3193,10 @@ function createProductButton(item, i) {
 }
 
 /**
- * @function
- * @description Function generates table through DOM element creation and the contens of myBasket local array. This also includes 
+ *
+ * @description Function generates table through DOM element creation and the contens of myBasket local array. This also includes
  * an overall total price calculation thats printed at the bottom of the table.
- * @returns {undefined}
+ *
  */
 function generateTable() {
   // get the reference for the body
@@ -3325,11 +3325,11 @@ function generateTable() {
 
 }
 /**
- * @function
+ *
  * @description Function removes products from the basket. If product quantity is more than one the quantity
  * is just reduced but if quantity is equal to 1 then the product is removed from the myBasket array.
- * @param {type} ev
- * @returns {undefined}
+ * @param {Event} ev
+ *
  */
 function removeProductBasket(ev){
   var button = ev.target;
@@ -3362,9 +3362,9 @@ function removeProductBasket(ev){
 }
 
 /**
- * @function
+ *
  * @description Function uses a server request to refresh the list of products.
- * @returns {undefined}
+ *
  */
 function refreshProducts() {
   getJSON("../api/database/selectTypeJSON.php", function(data) {
@@ -3373,9 +3373,9 @@ function refreshProducts() {
 }
 
 /**
- * @function
+ *
  * @description Function clears the myBasket array and refreshes the basket page.
- * @returns {undefined}
+ *
  */
 function clearBasket() {
   console.log(myBasket.length);
@@ -3392,11 +3392,11 @@ function clearBasket() {
 }
 
 /**
- * @function
- * @description Function adds values to the datalist used by the searchbar according to what the 
+ *
+ * @description Function adds values to the datalist used by the searchbar according to what the
  * user types in making it look like the search bar is predicting what the user is looking for.
  * This is achieved through searching through the productArray looking for matches.
- * @returns {undefined}
+ *
  */
 function searchEvent() {
   document.getElementById("productN").addEventListener("change", function(data) {
@@ -3421,10 +3421,10 @@ function searchEvent() {
 }
 
 /**
- * @function
+ *
  * @description This function retrives the basket that each user has stored in local storage.
  * The rertrieved data is then parsed over and inserted back into the myBasket local array.
- * @returns {undefined}
+ *
  */
 function retrieveBasket(){
   var localBasket = JSON.parse(localStorage.getItem("myBasket"));
@@ -3441,9 +3441,9 @@ function retrieveBasket(){
 
 }
 /**
- * @function
+ *
  * @description Function runs upon page load. Sets all intial details including page structure and local storage.
- * @returns {undefined}
+ *
  */
 window.onload = function() {
 

@@ -1,3 +1,10 @@
+/**
+* @description This function is used to load elements onto the page to give the illusion
+that the page has changed.
+-Based on examples provided by Kit Lester.
+* @param {String} URL
+* @param {Unknown} Callback
+*/
 function ajaxGet(URL, callback) {
   ifSend();
   searchArray = [];
