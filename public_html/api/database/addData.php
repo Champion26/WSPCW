@@ -18,7 +18,7 @@ if ($db_selected === 0) {
     echo 'Error creating database: ' . mysql_error() . "\n";
   }
 } else{
-  echo "database already exists";
+
 }
 
 mysql_close($link);

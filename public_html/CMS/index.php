@@ -3,22 +3,25 @@ include '../api/database/addData.php';
 ?>
 <div id="head"></div>
 <header>
+  <section id="pageTitleSection">
       <h1 id='pageTitle' data-edit="">Company Name</h1>
-      <h1 >Content Management System and Admin</h1>
-
-        <form id="searchBar" >
-          <fieldset>
-            <input list="names" id="productN" name="productN"  ><br>
-            <datalist id="names"></datalist>
-            <input type="button" value="Search" onclick="searchByNameGlobal(event)">
-          </fieldset>
-        </form>
-
-
-  <nav id='topNav'></nav>
+      <h1>Content Management System (CMS)</h1>
+    </section>
+      <section id="basketImageArea">
+      <img id="basketImage" onclick="basketLink()"  ondrop="dropImage(event)" ondragover="allowDrop(event)" src="http://localhost/WebScripting/Web-CW/public_html/images/images.jpg"></img>
+    </section>
 </header>
-<div id="dynamic"></div>
+<form id="searchBar" >
+  <fieldset>
+    <input list="names" id="productN" name="productN"  ><br>
+    <datalist id="names"></datalist>
+    <input type="button" value="Search" onclick="searchByNameGlobal(event)">
+  </fieldset>
+</form>
 
+
+<nav id='topNav'></nav>
+<div id="dynamic"></div>
 <body>
 
   <article>
@@ -38,6 +41,7 @@ include '../api/database/addData.php';
   <script src="../lib/Main.js" type="text/javascript"></script>
   <script src="../lib/changeCSS.js" type="text/javascript"></script>
   <script src="../lib/postJSON.js" type="text/javascript"></script>
+  <script src='../lib/CMSLoad.js' type="text/javascript"></script>
 
 </body>
 

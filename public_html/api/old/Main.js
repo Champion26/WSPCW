@@ -43,17 +43,7 @@ function addToBasket(e) {
   totalPrice = totalPrice + price;
   basket.push(newProduct);
 }
-function basketLink(){
-  ajaxGet('../api/database/getBasketJS.html', function(data) {
-    grabElement(data, 'mainContent');
-    generateTable();
-    getOrderDetails();
-  });
 
-  ajaxGet('../api/navigation/basketSidebar.html', function(data) {
-    grabElement(data, 'sidebar');
-  });
-}
 /**
 
    @description Function is used in conjunction with AJAX calls in order to grab and place page elements onto the document. Includes check if ID exists.
@@ -73,10 +63,10 @@ function grabElement(response, element) {
 */
 function setPageStructure() {
   /*Set head of page*/
-  ajaxGet('../api/structure/head.html', function(data) { /*Defines file to grab*/
+  ajaxGet('../api/structure/head.php', function(data) { /*Defines file to grab*/
     grabElement(data, 'head'); /*Sets where to put file*/
   });
-  ajaxGet('../api/structure/footer.html', function(data) {
+  ajaxGet('../api/structure/footer.php', function(data) {
     grabElement(data, 'footerLinks');
   });
 
@@ -103,7 +93,7 @@ function setRed() {
 function setHome() {
   document.getElementById("home").addEventListener("click", function(data) { /*homepage sidebar*/
 
-    ajaxGet('../api/navigation/homeSidebar.html', function(data) {
+    ajaxGet('../api/navigation/homeSidebar.php', function(data) {
       grabElement(data, 'sidebar');
       /*Sidebar*/
       document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
@@ -124,7 +114,7 @@ function setHome() {
         });
       });
       document.getElementById("changeCSS").addEventListener("click", function(data) {
-        ajaxGet('../api/navigation/changeColour.html', function(data) {
+        ajaxGet('../api/navigation/changeColour.php', function(data) {
           grabElement(data, 'mainContent');
         });
 
@@ -144,10 +134,10 @@ function setHome() {
 function setSearch() {
   document.getElementById("search").addEventListener("click", function(data) { /*homepage sidebar*/
 
-    ajaxGet('../api/navigation/searchSidebar.html', function(data) {
+    ajaxGet('../api/navigation/searchSidebar.php', function(data) {
       grabElement(data, 'sidebar');
     });
-    ajaxGet('../api/database/search.html', function(data) {
+    ajaxGet('../api/database/search.php', function(data) {
       grabElement(data, 'mainContent');
     });
 
@@ -215,7 +205,7 @@ function applyIndividualListener(type, x, types) {
     if (productType.length === 0) {
       alert("There are no products for this category.");
     } else {
-      ajaxGet('../api/database/getProductTable.html', function(data) {
+      ajaxGet('../api/database/getProductTable.php', function(data) {
         grabElement(data, 'mainContent');
         console.log(type);
         document.getElementById("productTitle").innerHTML = type;
@@ -428,7 +418,7 @@ function setProducts() {
 
   document.getElementById("products").addEventListener("click", function(data) { /*products sidebar & page */
 
-    ajaxGet('../api/navigation/productSidebar.html', function(data) {
+    ajaxGet('../api/navigation/productSidebar.php', function(data) {
       grabElement(data, 'sidebar');
       setProductSidebar();
     });
@@ -909,12 +899,12 @@ function searchByNameGlobal(e) {
       console.log("working");
       console.log(searchArray.length);
 
-      ajaxGet('../api/navigation/searchSidebar.html', function(data) {
+      ajaxGet('../api/navigation/searchSidebar.php', function(data) {
         grabElement(data, 'sidebar');
 
       });
 
-      ajaxGet('../api/database/search.html', function(data) {
+      ajaxGet('../api/database/search.php', function(data) {
         grabElement(data, 'mainContent');
         document.getElementById("searchTable").innerHTML = "";
         getSearchBy(dataTwo);
@@ -1488,10 +1478,10 @@ function setOffers() {
 
   document.getElementById("offers").addEventListener("click", function(data) { /*offer sidebar & page */
 
-    ajaxGet('../api/navigation/offerSidebar.html', function(data) {
+    ajaxGet('../api/navigation/offerSidebar.php', function(data) {
       grabElement(data, 'sidebar');
       document.getElementById("offerOne").addEventListener("click", function(data) {
-        ajaxGet('../api/database/offerOne.html', function(data) {
+        ajaxGet('../api/database/offerOne.php', function(data) {
           grabElement(data, 'mainContent');
         });
       });
@@ -1534,17 +1524,17 @@ function setAdminFieldContent() {
  */
 function setAdminAfterColourChange(){
 
-        ajaxGet('../api/database/setSiteDetails.html', function(data) {
+        ajaxGet('../api/database/setSiteDetails.php', function(data) {
           grabElement(data, 'mainContent');
           setAdminFieldContent();
         });
-        ajaxGet('../api/structure/head.html', function(data) { /*Defines file to grab*/
+        ajaxGet('../api/structure/head.php', function(data) { /*Defines file to grab*/
           grabElement(data, 'head'); /*Sets where to put file*/
         });
-        ajaxGet('../api/structure/footer.html', function(data) {
+        ajaxGet('../api/structure/footer.php', function(data) {
           grabElement(data, 'footerLinks');
         });
-        ajaxGet('../api/structure/topNavCMS.html', function(data) {
+        ajaxGet('../api/structure/topNavCMS.php', function(data) {
           grabElement(data, 'topNav');
           setHome();
           setProducts();
@@ -1970,7 +1960,7 @@ function getQuantity(){
 function setAdmin(){
   document.getElementById("adminPage").addEventListener("click", function(data) {
 
-    ajaxGet('../api/navigation/adminSidebar.html', function(data) {
+    ajaxGet('../api/navigation/adminSidebar.php', function(data) {
       grabElement(data, 'sidebar');
 
       document.getElementById("stock").addEventListener("click", function(data) {
@@ -2405,7 +2395,7 @@ function dropDeleteImage(ev){
 function setCMS() {
   document.getElementById("admin").addEventListener("click", function(data) { /*offer sidebar & page */
 
-    ajaxGet('../api/navigation/cmsSidebar.html', function(data) {
+    ajaxGet('../api/navigation/cmsSidebar.php', function(data) {
       grabElement(data, 'sidebar');
       document.getElementById("addProduct").addEventListener("click", function(data) {
         ajaxGet('../api/database/addJSON.html', function(data) {
@@ -2427,20 +2417,20 @@ function setCMS() {
         });
       });
       document.getElementById("addType").addEventListener("click", function(data) {
-        ajaxGet('../api/database/addProductType.html', function(data) {
+        ajaxGet('../api/database/addProductType.php', function(data) {
           grabElement(data, 'mainContent');
           getTypes();
 
         });
       });
       document.getElementById("editProduct").addEventListener("click", function(data) {
-        ajaxGet('../api/database/editAdmin.html', function(data) {
+        ajaxGet('../api/database/editAdmin.php', function(data) {
           grabElement(data, 'mainContent');
           getTypes();
         });
       });
       document.getElementById("setPageDetails").addEventListener("click", function(data) {
-        ajaxGet('../api/database/setSiteDetails.html', function(data) {
+        ajaxGet('../api/database/setSiteDetails.php', function(data) {
           grabElement(data, 'mainContent');
           console.log(navHeight);
           setAdminFieldContent();
@@ -2469,13 +2459,13 @@ function setCMS() {
  */
 function setBasket() {
   document.getElementById("myBasket").addEventListener("click", function(data) { /*offer sidebar & page */
-    ajaxGet('../api/database/getBasketJS.html', function(data) {
+    ajaxGet('../api/database/getBasketJS.php', function(data) {
       grabElement(data, 'mainContent');
       generateTable();
       getOrderDetails();
     });
 
-    ajaxGet('../api/navigation/basketSidebar.html', function(data) {
+    ajaxGet('../api/navigation/basketSidebar.php', function(data) {
       grabElement(data, 'sidebar');
     });
 
@@ -2491,102 +2481,20 @@ function setBasket() {
  */
 function setPage() {
   setPageStructure();
-  ajaxGet('../api/structure/topNavCMS.html', function(data) {
+  ajaxGet('../api/structure/topNavCMS.php', function(data) {
     grabElement(data, 'topNav');
     setHome();
     setProducts();
     setBasket();
     setSearch();
     setCMS();
-
-
-  });
-
-
-}
-
-/**
- *
- * @description Function sets intial page and general page structure through a series of function calls.
- *
- */
-function setPageCustomer() {
-  setPageStructure();
-  ajaxGet('../api/structure/topNav.html', function(data) {
-    grabElement(data, 'topNav');
-    setHome();
-    setProducts();
-    setBasket();
-    setSearch();
-
+    setAdmin();
 
   });
 
 
 }
 
-/**
- *
- * @description Function sets intial page and general page structure through a series of function calls.
- *
- */
-function setPageAdmin() {
-  setPageStructure();
-  //adminPageStructure();
-
-
-}
-
-/**
-*
-*/
-function adminPageStructure(){
-  ajaxGet('../api/navigation/adminSidebar.html', function(data) {
-    grabElement(data, 'sidebar');
-
-    document.getElementById("stock").addEventListener("click", function(data) {
-      ajaxGet('../api/database/stock.html', function(data) {
-        grabElement(data, 'mainContent');
-        getTypes();
-        generateReport();
-      });
-    });
-    document.getElementById("orders").addEventListener("click", function(data) {
-      ajaxGet('../api/database/orderList.html', function(data) {
-        grabElement(data, 'mainContent');
-        getOrders();
-
-      });
-    });
-  });
-  ajaxGet('../api/database/stock.html', function(data) {
-    grabElement(data, 'mainContent');
-    getTypes();
-    generateReport();
-  });
-}
-/**
- *
- * @description Page sets elements of intial page load for the admin page.
- *
- */
-function pageLoadAdmin() {
-  document.addEventListener("keypress", function(){
-    sendDBChanges(event);
-    }
-    );
-  adminPageStructure();
-  getJSON("../api/database/selectTypeJSON.php", function(data) {
-    console.log(data);
-    getProducts(data);
-
-  });
-
-  getJSON("../api/database/selectProductType.php", function(data) {
-    getProductTypes(data);
-  });
-  getDetails();
-}
 /**
  *
  * @description Page sets elements of intial page load.
@@ -2597,7 +2505,7 @@ function pageLoad() {
     sendDBChanges(event);
     }
     );
-  ajaxGet('../api/navigation/homeSidebar.html', function(data) {
+  ajaxGet('../api/navigation/homeSidebar.php', function(data) {
     grabElement(data, 'sidebar');
     document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
       /*Content*/
@@ -2611,7 +2519,7 @@ function pageLoad() {
       });
     });
     document.getElementById("changeCSS").addEventListener("click", function(data) {
-      ajaxGet('../api/navigation/changeColour.html', function(data) {
+      ajaxGet('../api/navigation/changeColour.php', function(data) {
         grabElement(data, 'mainContent');
       });
 
@@ -2825,7 +2733,8 @@ function getScheme(response){
       console.log(scheme[5], scheme[6]);
       navHeight = scheme[5];
       navWidth = scheme[6];
-      ajaxGet('../api/navigation/homeSidebar.html', function(data) {
+
+      ajaxGet('../api/navigation/homeSidebar.php', function(data) {
         grabElement(data, 'sidebar');
         /*Sidebar*/
         document.getElementById("contactUs").addEventListener("click", function(data) { /*sets contact us button with content grab */
@@ -2846,7 +2755,7 @@ function getScheme(response){
           });
         });
         document.getElementById("changeCSS").addEventListener("click", function(data) {
-          ajaxGet('../api/navigation/changeColour.html', function(data) {
+          ajaxGet('../api/navigation/changeColour.php', function(data) {
             grabElement(data, 'mainContent');
           });
 
@@ -2855,10 +2764,8 @@ function getScheme(response){
           grabElement(data, 'mainContent');
         });
       });
-
     console.log("scheme");
 }
-
 /**
  *
  * @description Function takes response from ajax call and pushes results into local product array.
@@ -3436,7 +3343,7 @@ function removeProductBasket(ev){
       myBasket.splice(location, 1);
       alert("You have removed one "+product["productName"]+".");
       localStorage.setItem("myBasket", JSON.stringify(myBasket));
-      ajaxGet('../api/database/getBasketJS.html', function(data) {
+      ajaxGet('../api/database/getBasketJS.php', function(data) {
         grabElement(data, 'mainContent');
         generateTable();
       });
@@ -3444,7 +3351,7 @@ function removeProductBasket(ev){
       product["quantity"] = quantity - 1;
       alert("You have removed one "+product["productName"]+".");
       localStorage.setItem("myBasket", JSON.stringify(myBasket));
-      ajaxGet('../api/database/getBasketJS.html', function(data) {
+      ajaxGet('../api/database/getBasketJS.php', function(data) {
         grabElement(data, 'mainContent');
         generateTable();
       });
@@ -3475,7 +3382,7 @@ function clearBasket() {
   myBasket = [];
   console.log(myBasket.length);
   console.log(myBasket);
-  ajaxGet('../api/database/getBasketJS.html', function(data) {
+  ajaxGet('../api/database/getBasketJS.php', function(data) {
     grabElement(data, 'mainContent');
     generateTable();
   });
@@ -3533,5 +3440,18 @@ function retrieveBasket(){
   }
 
 }
+/**
+ *
+ * @description Function runs upon page load. Sets all intial details including page structure and local storage.
+ *
+ */
+window.onload = function() {
 
+  setPage();
+  pageLoad();
+  searchEvent();
+  console.log(productArray);
+  retrieveBasket();
+
+};
 //Matthew Champion
