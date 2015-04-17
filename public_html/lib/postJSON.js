@@ -1,3 +1,9 @@
+/**
+* @description Function designed to send a variable (typically a string url) to a file.
+* -Based on examples provided by Kit Lester.
+* @param {String} URL
+* @param {Unknown} callback
+*/
 function postJSON(variable, URL, callback) {
   var ajaxObj = new XMLHttpRequest();
   ajaxObj.open("POST", URL, true);
@@ -13,6 +19,13 @@ function postJSON(variable, URL, callback) {
   ajaxObj.send(variable);
 }
 
+/**
+* @description Function designed to send a variable (typically a string url) to a file and then parse over the JSON response.
+* Typically used for sending and immediately retrieving information from PHP responders.
+* -Based on examples provided by Kit Lester.
+* @param {String} URL
+* @param {Unknown} callback
+*/
 function returnJSON(variable, URL, callback) {
   var ajaxObj = new XMLHttpRequest();
   ajaxObj.open("POST", URL, true);

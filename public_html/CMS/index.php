@@ -35,7 +35,7 @@ include '../api/database/addData.php';
   </footer>
   <script src='../lib/ajaxget.js' type="text/javascript"></script>
   <script src="../lib/getJson.js" type="text/javascript"></script>
-  <script src="CMS.js" type="text/javascript"></script>
+  <script src="../lib/Main.js" type="text/javascript"></script>
   <script src="../lib/changeCSS.js" type="text/javascript"></script>
   <script src="../lib/postJSON.js" type="text/javascript"></script>
 

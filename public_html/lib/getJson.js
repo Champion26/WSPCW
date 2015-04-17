@@ -1,3 +1,9 @@
+/**
+* @description Function designed to retrieve a JSON object from a file and parse over it.
+* -Based on examples provided by Kit Lester.
+* @param {String} URL
+* @param {Unknown} callback
+*/
 function getJSON(URL, callback) {
   var ajaxObj = new XMLHttpRequest();
 
@@ -8,5 +14,5 @@ function getJSON(URL, callback) {
         callback(JSON.parse(ajaxObj.responseText));
       };
       ajaxObj.send();
-     
+
 };
