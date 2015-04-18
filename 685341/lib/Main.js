@@ -1365,8 +1365,6 @@ function sendImage() {
       filename = file.name;
 
     }
-    var all = formData.getAll('images');
-    console.log(all);
 
     console.log(formData);
     var xhr = new XMLHttpRequest();
