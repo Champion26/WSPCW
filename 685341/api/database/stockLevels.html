@@ -1,0 +1,16 @@
+
+<h2 id="stockForm" data-edit="">Stock Page</h2>
+<p data-edit="">This page allows you to change the stock levels of a specific product. This is done by entering a product key into the form below and the
+  pressing the 'Get Quantity' button. This will then provide the current quantity of the product.</p>
+  <p data-edit=""> In order to change the stock please enter the value that you wish to change it by in the related text area.</p>
+
+<form id="quantityForm" method="POST">
+  <p></p>
+  <fieldset>
+      Product Code: <input type="text" id="productCode"><br><br>
+      <input type="button" id="getQuantity" value="Get Quantity"><br><br>
+      Quantity: <input type="number" id="oldQuantity"><br><br>
+      Change Quantity By: <input type="number" id="increaseQuantity"><br><br>
+    <input type="button" id="updateQuantity"  value="Update">
+  </fieldset>
+</form>

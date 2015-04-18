@@ -1,0 +1,25 @@
+
+<h2 id="addProductTitle" data-edit="">Add Product</h2>
+<p data-edit="" id="addNewProductDescription"> This page allows you to enter new products into the system. All you have to do is enter the specific details below and press the 'Submit'
+  button to enter the product. You can either manually select the image file to upload or you can drag an image file into the box shown below.</p>
+<form id="addProduct" method="POST">
+  <fieldset>
+  Product Code:  <input type="text" id="productCode" name="productCode" ><br>
+  <br>
+  Product Name:  <input type="text" id="productName" name="productName" ><br>
+  <br>
+  Description:  <input type="text"  id="description" name="description" ><br>
+  <br>
+  Product Type:  <input list="types" id="productType" name="productType" ><br>
+  <datalist id="types"></datalist>
+  <br>
+  Price (£):  <input type="number" step="any" id="price" name="price" ><br>
+  <br>
+  Quantity:  <input type="number" id="quantity" name="quantity"><br><br>
+  <br>
+  Image: <input type="file" id="imageFile" size="60" value=""><br><br>
+  <p data-edit="">Please drag the image file into the area below or manually select the file above.</p>
+  <canvas id="imageCanvas" ondragover="allowDrop(event)" ondrop="dropFile(event)"></canvas>
+  <input type="button" id="sendButton" name="sendButton" value="Add">
+</fieldset>
+</form>

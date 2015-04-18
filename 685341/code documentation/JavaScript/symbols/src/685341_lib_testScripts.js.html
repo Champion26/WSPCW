@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">&lt;</span><span class="NAME">script</span><span class="PUNC">></span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">myElem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.getElementById</span><span class="PUNC">(</span><span class="STRN">'catOne'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">myElem</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">alert</span><span class="PUNC">(</span><span class="STRN">'does not exist!'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="WHIT">    </span><span class="PUNC">&lt;</span><span class="REGX">/script>
+<span class='line'>  5</span> 
+<span class='line'>  6</span>     ajaxGet('api/</span><span class="NAME">homeSidebar.php</span><span class="STRN">', function(data){
+<span class='line'>  7</span>       grabElement(data, '</span><span class="NAME">sidebar</span><span class="STRN">')
+<span class='line'>  8</span>       document.getElementById("contactUs").addEventListener("click", function(data){
+<span class='line'>  9</span>         ajaxGet('</span><span class="NAME">content</span><span class="PUNC">/</span><span class="NAME">message.txt</span><span class="STRN">', function(data){
+<span class='line'> 10</span>           grabElement(data, '</span><span class="NAME">mainContent</span><span class="STRN">')
+<span class='line'> 11</span>         });}, false);
+<span class='line'> 12</span>         document.getElementById("description").addEventListener("click", function(data){
+<span class='line'> 13</span>           ajaxGet('</span><span class="NAME">content</span><span class="PUNC">/</span><span class="NAME">description.txt</span><span class="STRN">', function(data){
+<span class='line'> 14</span>             grabElement(data, '</span><span class="NAME">mainContent</span><span class="TOKN"></span></pre></body></html>

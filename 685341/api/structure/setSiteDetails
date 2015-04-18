@@ -1,0 +1,36 @@
+
+<h2>Edit Product</h2>
+<p>Please enter the product code that you wish to search for.</p>
+
+
+<form id="searchProduct">
+  <fieldset>
+  Product Code:  <input type="text" id="productCode" name="productCode" ><br><br>
+  <input type="button" value="Search" onclick="getSearch(event)">
+</fieldset>
+</form>
+
+<p>The results will appear below</p>
+<form id="viewProduct">
+  <fieldset>
+  <input type="hidden"  name="pCode" id="pCode" value=""><br>
+  <br>
+  Product Name:  <input type="text" name="productN" id="productN" value="" > <br>
+  <br>
+  Description:  <input type="text"   name="description" id="description" value=""> <br>
+  <br>
+  Product Type:  <input type="number" name="productType" id="productType" value="" > <br>
+  <br>
+  1: Desktop<br>
+  2: Laptop<br>
+  3: Part <br>
+  <br>
+  Price (£):  <input type="number" step="any" name="price" id="price" value="" > <br>
+  <br>
+  Quantity:  <input type="number"  name="quantity" id="quantity" value="" ><br><br>
+
+  <input type="button" name='submitEdit' value="Submit" onclick="submitChanges(event)">
+
+
+</fieldset>
+</form>

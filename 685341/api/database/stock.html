@@ -1,0 +1,19 @@
+
+<h2 id="stockForm" data-edit="">Stock Page</h2>
+
+<form id="generateFile" method="POST">
+  <p>This form will create a text file report of the stock level for each report.</p>
+  <fieldset>
+      Title of Report: <input type="text" id="reportTitle"><br><br>
+      Author: <input type="text" id="reportAuthor"><br><br>
+      Type: <input list="types" id="productType"><Br><br>
+      <datalist id="types"></datalist>  
+    <input type="button" id="createReport" name="createReport" value="Generate">
+  </fieldset>
+</form>
+<form id="removeTable">
+  <fieldset>
+    <input type="button" id="removeTableButton" value="Hide Table">
+  </fieldset>
+</form>
+<table id="reportTable"></table>

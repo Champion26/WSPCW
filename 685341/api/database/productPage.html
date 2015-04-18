@@ -1,0 +1,40 @@
+<h2>Product Page</h2>
+<section id="productEnclosure">
+<section id="productPage">
+<img id="productImage" draggable="true"  ondragstart="drag(event)" ondragover="allowDrop(event)"  src="balconyview.jpg" alt="View from my balcony, showing a row of houses, trees and a castle"></img>
+
+<strong><p  id="code">Product Code:</p></strong>
+<p id="productPageCode"></p>
+<strong><p  id="name">Product Name:</p></strong>
+<p  data-edit="" id="productPageName"></p>
+<strong><p  id="desc">Description:</p></strong>
+<p data-edit="" id="productPageDesc"></p>
+<strong><p  id="price">Product Price:</p></strong>
+<p data-edit="" id="productPagePrice"></p>
+<strong><p  id="quantity">Product Quantity:</p></strong>
+<p data-edit="" id="productPageQuantity"></p>
+<strong><p >Add to Basket</p></strong>
+<div id="productButton" ></input>
+
+</section>
+</section>
+<script>
+function button(){
+  var celButton = document.createElement("button");
+  celButton.innerHTML = 'Add to Basket';
+  var name = "addButton" + i;
+  buttonList.push(name);
+  celButton.setAttribute("id", name);
+  var productObj = {
+    productCode: item[0],
+    productName: item[1],
+    productType: item[3],
+    description: item[2],
+    price: item[4],
+    quantity: item[5]
+  };
+  celButton.setAttribute("data-detail", JSON.stringify(productObj));
+
+  productButton.push(productObj);
+}
+</script>
